@@ -293,13 +293,1138 @@
 
     <section id="login-section">
         <div class="login-card">
-            <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/4QBmRXhpZgAATU0AKgAAAAgABgESAAMAAAABAAEAAAEaAAUAAAABAAAAVgEbAAUAAAABAAAAXgEoAAMAAAABAAIAAAITAAMAAAABAAEAAIdpAAQAAAABAAAAZgAAAMAAAABgAAAAAQAAAGAAAAABAAAAAAAAAAYAAJAHAAQAAAAwMjEwAZEHAAQAAAABAgMAAKAHAAQAAAAwMTAwAaADAAEAAAABAAAAAqADAAEAAAABAAAAyqQDAAEAAAABAAAAAKACAAEAAAABAAAAyAAAAAAA/+AAEEpGSUYAAQEAAAEAAQAA/9sAQwADAgIDAgIDAwMDBAMDBAUIBQUEBAUKBwcGCAwKDAwLCgsLDQ4SEA0OEQ4LCxAWEBETFBUVFQwPFxgWFBgSFBUU/9sAQwEDBAQFBAUJBQUJFA0LDRQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU/8AAEQgAyADIAwEiAAIRAQMRAf/EAB8AAAEFAQEBAQEBAAAAAAAAAAABAgMEBQYHCAkKC//EALUQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1VWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1VWV1hZWm and all these
-functions should be inside `document.addEventListener('DOMContentLoaded', () => { ... });`
+            <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/4QBmRXhpZgAATU0AKgAAAAgABgESAAMAAAABAAEAAAEaAAUAAAABAAAAVgEbAAUAAAABAAAAXgEoAAMAAAABAAIAAAITAAMAAAABAAEAAIdpAAQAAAABAAAAZgAAAMAAAABgAAAAAQAAAGAAAAABAAAAAAAAAAYAAJAHAAQAAAAwMjEwAZEHAAQAAAABAgMAAKAHAAQAAAAwMTAwAaADAAEAAAABAAAAAqADAAEAAAABAAAAyqQDAAEAAAABAAAAAKACAAEAAAABAAAAyAAAAAAA/+AAEEpGSUYAAQEAAAEAAQAA/9sAQwADAgIDAgIDAwMDBAMDBAUIBQUEBAUKBwcGCAwKDAwLCgsLDQ4SEA0OEQ4LCxAWEBETFBUVFQwPFxgWFBgSFBUU/9sAQwEDBAQFBAUJBQUJFA0LDRQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU/8AAEQgAyADIAwEiAAIRAQMRAf/EAB8AAAEFAQEBAQEBAAAAAAAAAAABAgMEBQYHCAkKC//EALUQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1VWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1VWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4+Tl5ufo6ery8vP09fb3+Pn6/+oADAMBAAIRAxEAPwD9U6KKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooA//Z" alt="Logo Nippori" class="login-logo">
+            <h1>Sistem Nippori</h1>
+            <p class="subtitle">Silakan masukkan kode akses untuk melanjutkan.</p>
+            <form id="access-form">
+                <div class="form-group">
+                    <label for="access-code">Kode Akses</label>
+                    <input type="password" id="access-code" required>
+                </div>
+                <p id="access-error"></p>
+                <button type="submit" id="access-btn">Masuk</button>
+            </form>
+        </div>
+    </section>
 
-**Here's the revised code that includes these fixes:**
+    <div class="main-app-container" id="main-app">
+        <nav class="main-nav">
+            <div class="nav-header">
+                Nippori Sistem
+                <button id="mobile-nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+            </div>
+            <ul class="nav-links" id="nav-links-list">
+                <li><a href="#dashboard" class="nav-link active">Dashboard</a></li>
+                <li><a href="#produk" class="nav-link">Produk</a></li>
+                <li><a href="#data-list" class="nav-link">Data List</a></li>
+                <li><a href="#deskripsi" class="nav-link">Deskripsi Detail</a></li>
+            </ul>
+            <button id="logout-btn">Keluar</button>
+        </nav>
 
-```html
-<!DOCTYPE html>
+        <main class="main-content">
+            <section id="dashboard" class="content-section active">
+                <h1>Dashboard</h1>
+                <div class="dashboard-grid">
+                    <div class="stat-card clickable" id="master-products-card">
+                        <h3>Total Produk Master</h3>
+                        <p class="stat-number" id="total-master-products">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Varian Unik</h3>
+                        <p class="stat-number" id="total-unique-variants">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Stok Barang</h3>
+                        <p class="stat-number" id="total-stock-items">0</p>
+                    </div>
+                    <div class="stat-card clickable" id="sold-items-card">
+                        <h3>Barang Terjual</h3>
+                        <p class="stat-number" id="total-items-sold">0</p>
+                        <p class="stat-label">(30 Hari Terakhir)</p>
+                    </div>
+                     <div class="stat-card">
+                        <h3>Total Pendapatan</h3>
+                        <p class="stat-number" id="total-revenue">Rp 0</p>
+                        <p class="stat-label">(30 Hari Terakhir)</p>
+                    </div>
+                </div>
+                <div class="card" style="margin-top: 30px;">
+                    <h2>Produk Stok Menipis</h2>
+                    <div class="filter-container" style="margin-bottom: 15px; grid-template-columns: 1fr;">
+                        <input type="text" id="low-stock-batch-filter" list="low-stock-batch-suggestions" placeholder="Filter berdasarkan batch...">
+                        <datalist id="low-stock-batch-suggestions"></datalist>
+                    </div>
+                    <ul id="low-stock-list" class="low-stock-list"></ul>
+                    <div id="low-stock-pagination-container"></div>
+                </div>
+            </section>
+
+            <section id="produk" class="content-section">
+                <h1>Produk</h1>
+                <div class="card">
+                    <h2>Buat / Edit Master Produk</h2>
+                    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                        <button id="save-master-btn" style="flex: 1;">Simpan Master Produk</button>
+                        <button id="duplicate-master-btn" style="flex: 1; background-color: var(--dark-gray); color: white;">Duplikat</button>
+                        <button id="delete-master-btn" style="flex: 1; background-color: var(--nippori-red); color: white;">Hapus Master</button>
+                    </div>
+                    <p>Langkah pertama: Buat atau edit detail utama produk di sini sebelum menambahkan varian.</p>
+                    <div class="form-group">
+                        <label for="master-judul">Judul Produk</label>
+                        <input type="text" id="master-judul" list="master-judul-suggestions" placeholder="Buat judul baru atau pilih yang sudah ada">
+                        <datalist id="master-judul-suggestions"></datalist>
+                    </div>
+                     <div class="form-group">
+                        <label for="master-gambar">Gambar Utama</label>
+                        <input type="file" id="master-gambar" accept="image/*">
+                        <img id="master-gambar-preview" src="" alt="Preview Gambar Utama" style="max-width: 100px; margin-top: 10px; display: none;">
+                    </div>
+                    <div class="form-group">
+                        <label for="master-kondisi">Kondisi</label>
+                        <select id="master-kondisi">
+                            <option value="New">New</option>
+                            <option value="Open Box">Open Box</option>
+                            <option value="Preloved (Used)">Preloved (Used)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="master-rilis">Rilis</label>
+                        <input type="month" id="master-rilis">
+                    </div>
+                    <div class="form-group">
+                        <label for="master-asal">Asal</label>
+                        <input type="text" id="master-asal" placeholder="Contoh: Jepang">
+                        <datalist id="asal-suggestions"></datalist>
+                    </div>
+                    <div class="form-group">
+                        <label for="master-brand">Brand</label>
+                        <input type="text" id="master-brand" list="brand-suggestions" placeholder="Contoh: Bandai">
+                        <datalist id="brand-suggestions"></datalist>
+                    </div>
+                    <div class="form-group">
+                        <label>Fitur Produk</label>
+                        <div class="fitur-container">
+                            <div class="fitur-item"><input type="checkbox" id="fitur-1" value="Original Jepang"><label for="fitur-1">Original Jepang</label></div>
+                            <div class="fitur-item"><input type="checkbox" id="fitur-2" value="Detail Kualitas Tinggi"><label for="fitur-2">Detail Kualitas Tinggi</label></div>
+                            <div class="fitur-item"><input type="checkbox" id="fitur-3" value="Include Line Up Paper"><label for="fitur-3">Include Line Up Paper</label></div>
+                            <div class="fitur-item"><input type="checkbox" id="fitur-4" value="No Gacha Ball"><label for="fitur-4">No Gacha Ball</label></div>
+                        </div>
+                    </div>
+                     <div class="form-group">
+                        <label for="master-keterangan">Keterangan (Opsional)</label>
+                        <textarea id="master-keterangan" rows="3" placeholder="Catatan tambahan untuk produk ini..."></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <section id="data-list" class="content-section">
+                <h1>Data List</h1>
+                <div class="card">
+                    <h2>Input Varian</h2>
+                    <p>Langkah kedua: Pilih judul produk, lalu tambahkan varian-variannya di sini.</p>
+                    <div class="form-group">
+                        <label for="judul-pilihan">Pilih Judul Produk</label>
+                        <input type="text" id="judul-pilihan" list="judul-pilihan-suggestions" placeholder="Ketik untuk mencari judul...">
+                        <datalist id="judul-pilihan-suggestions"></datalist>
+                    </div>
+                    <div class="form-group"><label for="total-variant">Jumlah Varian untuk Ditambahkan:</label><input type="number" id="total-variant" min="1"></div>
+                    <div class="form-group">
+                        <label for="batch-month-picker">Bulan Barang Masuk</label>
+                        <div class="batch-generator">
+                            <input type="month" id="batch-month-picker">
+                        </div>
+                    </div>
+                    <div class="form-group"><label for="batch-tag">Batch (Tag):</label><input type="text" id="batch-tag" placeholder="Kode batch akan dibuat otomatis..."><datalist id="batch-suggestions"></datalist></div>
+                    
+                    <div class="bulk-edit-container">
+                        <h4>Ubah Massal (Opsional)</h4>
+                        <div class="price-group">
+                            <div class="form-group"><label>Harga Normal Massal:</label><input type="number" id="bulk-harga-normal" min="0"></div>
+                            <div class="form-group"><label>Harga Diskon Massal:</label><input type="number" id="bulk-harga-diskon" min="0"></div>
+                            <div class="form-group"><label>Stok Massal:</label><input type="number" id="bulk-stok" min="0"></div>
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px solid var(--border-color); margin: 20px 0;">
+                    <div id="variant-inputs-container"></div>
+                    <button id="submit-variants-btn" style="display: none;">Simpan Semua Varian</button>
+                </div>
+                
+                <div class="card product-list-card">
+                     <h2>Daftar Semua Produk</h2>
+                    <div class="product-list-header">
+                        <div class="filter-container">
+                            <input type="text" id="search-input" placeholder="Cari berdasarkan judul, varian, batch, atau kode...">
+                            <input type="text" id="batch-filter" list="batch-suggestions" placeholder="Filter berdasarkan batch...">
+                            <select id="sort-filter">
+                                <option value="desc">Urutkan: Terbaru</option>
+                                <option value="asc">Urutkan: Terlama</option>
+                            </select>
+                        </div>
+                        <div class="select-all-container">
+                            <label for="select-all-filtered">Pilih Semua</label>
+                            <input type="checkbox" id="select-all-filtered">
+                        </div>
+                        <div id="product-counts"></div>
+                    </div>
+                    <div id="product-list-container"></div>
+                     <div id="pagination-container"></div>
+                    <div class="product-list-footer">
+                        <div class="footer-actions-wrapper">
+                            <div class="actions-container">
+                                <button id="print-pdf-btn">Print ke PDF</button>
+                                <button id="print-thermal-btn">Cetak Label Thermal</button>
+                            </div>
+                            <div class="actions-container">
+                                 <button id="download-images-btn">Unduh Gambar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="deskripsi" class="content-section">
+                <h1>Deskripsi Detail</h1>
+                <div class="card">
+                    <h2>Generate Deskripsi untuk Shopee</h2>
+                    <p>Langkah ketiga: Pilih judul produk untuk membuat deskripsi lengkap yang siap disalin.</p>
+                     <div class="form-group">
+                        <label for="desc-judul-pilihan">Pilih Judul Produk</label>
+                         <input type="text" id="desc-judul-pilihan" list="desc-judul-pilihan-suggestions" placeholder="Ketik untuk mencari judul...">
+                         <datalist id="desc-judul-pilihan-suggestions"></datalist>
+                    </div>
+                    <textarea id="generated-description" readonly rows="15"></textarea>
+                    <br><br>
+                    <button id="copy-description-btn">Salin Deskripsi</button>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <div id="image-popup" class="modal-overlay">
+         <button id="image-popup-close" class="modal-close">&times;</button>
+        <div class="modal-content"><img id="popup-img" src=""></div>
+    </div>
+    <div id="edit-modal" class="modal-overlay">
+        <div class="modal-inner-content">
+            <button id="edit-modal-close" class="modal-close">&times;</button>
+            <h2>Edit Varian</h2>
+            <input type="hidden" id="edit-uuid">
+             <div class="form-group">
+                <label for="edit-variant-name">Nama Varian</label>
+                <input type="text" id="edit-variant-name">
+            </div>
+             <div class="price-group">
+                <div class="form-group"><label>Harga Normal:</label><input type="number" id="edit-harga-normal" min="0"></div>
+                <div class="form-group"><label>Harga Diskon:</label><input type="number" id="edit-harga-diskon" min="0"></div>
+            </div>
+            <div class="form-group">
+                <label for="edit-stok">Stok Baru</label>
+                <input type="number" id="edit-stok" min="0">
+            </div>
+             <div class="form-group">
+                <label for="edit-stok-note-select">Catatan Perubahan Stok</label>
+                <select id="edit-stok-note-select">
+                    <option value="Terjual">Terjual</option>
+                    <option value="Barang Masuk">Barang Masuk</option>
+                    <option value="Koreksi Manual">Koreksi Manual</option>
+                    <option value="Retur">Retur</option>
+                    <option value="Rusak">Rusak</option>
+                    <option value="Lainnya">Lainnya...</option>
+                </select>
+            </div>
+            <div class="form-group" id="edit-stok-note-other-container" style="display: none;">
+                <label for="edit-stok-note-other">Catatan Lainnya</label>
+                <input type="text" id="edit-stok-note-other" placeholder="Masukkan catatan custom">
+            </div>
+            <hr>
+             <div class="form-group">
+                <label for="edit-batch">Batch</label>
+                <input type="text" id="edit-batch" list="batch-suggestions">
+            </div>
+            <div class="form-group">
+                <label for="edit-lokasi">Lokasi Fisik</label>
+                <input type="text" id="edit-lokasi">
+            </div>
+            <div class="form-group">
+                <label for="edit-batas-minimum">Batas Minimum Stok</label>
+                <input type="number" id="edit-batas-minimum" min="0">
+            </div>
+             <div class="form-group">
+                <label for="edit-gambar-variant">Gambar Varian</label>
+                <input type="file" id="edit-gambar-variant" accept="image/*">
+                <img id="edit-gambar-preview" src="" style="max-width: 100px; margin-top: 10px;">
+            </div>
+            <button id="save-edit-btn">Simpan Perubahan</button>
+        </div>
+    </div>
+    <div id="quick-add-modal" class="modal-overlay">
+        <div class="modal-inner-content">
+             <button id="quick-add-modal-close" class="modal-close">&times;</button>
+             <h2 id="quick-add-title"></h2>
+             <input type="hidden" id="quick-add-judul">
+             <div class="form-group">
+                 <label>Nama Varian (Pilih yang ada untuk restock, atau ketik baru)</label>
+                 <input type="text" id="quick-add-variant-name" list="quick-add-variant-suggestions">
+                 <datalist id="quick-add-variant-suggestions"></datalist>
+             </div>
+              <div class="price-group">
+                <div class="form-group"><label>Harga Normal:</label><input type="number" id="quick-add-harga-normal" min="0"></div>
+                <div class="form-group"><label>Harga Diskon:</label><input type="number" id="quick-add-harga-diskon" min="0"></div>
+            </div>
+             <div class="form-group"><label>Jumlah Stok:</label><input type="number" id="quick-add-stok" min="1"></div>
+             <div class="form-group"><label>Batch (Opsional):</label><input type="text" id="quick-add-batch" list="batch-suggestions"></div>
+             <div class="form-group"><label>Gambar Varian (Opsional):</label><input type="file" id="quick-add-gambar" accept="image/*"></div>
+             <button id="quick-add-save-btn">Simpan</button>
+        </div>
+    </div>
+    <div id="history-modal" class="modal-overlay">
+         <div class="modal-inner-content">
+             <button id="history-modal-close" class="modal-close">&times;</button>
+             <h2 id="history-modal-title">Riwayat Stok</h2>
+             <ul id="history-modal-list"></ul>
+         </div>
+    </div>
+    <div id="sold-items-modal" class="modal-overlay">
+         <div class="modal-inner-content">
+             <button id="sold-items-modal-close" class="modal-close">&times;</button>
+             <h2>Riwayat Barang Terjual</h2>
+             <div id="sold-items-totals"></div>
+             <div class="filter-container">
+                 <div class="form-group">
+                     <label for="sold-start-date">Dari Tanggal</label>
+                     <input type="date" id="sold-start-date">
+                 </div>
+                 <div class="form-group">
+                     <label for="sold-end-date">Sampai Tanggal</label>
+                     <input type="date" id="sold-end-date">
+                 </div>
+             </div>
+             <ul id="sold-items-modal-list" class="sold-items-list"></ul>
+         </div>
+    </div>
+    <div id="master-report-modal" class="modal-overlay">
+        <div class="modal-inner-content">
+            <button id="master-report-modal-close" class="modal-close">&times;</button>
+            <h2>Laporan Produk Master</h2>
+            <div id="master-report-modal-list" class="master-report-list"></div>
+        </div>
+    </div>
+    <div id="pdf-options-modal" class="modal-overlay">
+        <div class="modal-inner-content">
+            <button id="pdf-options-modal-close" class="modal-close">&times;</button>
+            <h2>Pilih Data untuk Dicetak di PDF</h2>
+            <div id="pdf-options-container">
+                <div class="fitur-item"><input type="checkbox" id="pdf-opt-gambar" checked><label for="pdf-opt-gambar">Gambar Varian</label></div>
+                <div class="fitur-item"><input type="checkbox" id="pdf-opt-kode" checked><label for="pdf-opt-kode">Kode Produk</label></div>
+                <div class="fitur-item"><input type="checkbox" id="pdf-opt-stok" checked><label for="pdf-opt-stok">Stok</label></div>
+                <div class="fitur-item"><input type="checkbox" id="pdf-opt-harga-normal" checked><label for="pdf-opt-harga-normal">Harga Normal</label></div>
+                <div class="fitur-item"><input type="checkbox" id="pdf-opt-harga-diskon" checked><label for="pdf-opt-harga-diskon">Harga Diskon</label></div>
+                <div class="fitur-item"><input type="checkbox" id="pdf-opt-persen-diskon" checked><label for="pdf-opt-persen-diskon">Persentase Diskon</label></div>
+                <div class="fitur-item"><input type="checkbox" id="pdf-opt-batch"><label for="pdf-opt-batch">Batch</label></div>
+                <div class="fitur-item"><input type="checkbox" id="pdf-opt-lokasi"><label for="pdf-opt-lokasi">Lokasi</label></div>
+            </div>
+            <br>
+            <button id="generate-pdf-btn">Buat PDF</button>
+        </div>
+    </div>
+     <div id="download-images-modal" class="modal-overlay">
+        <div class="modal-inner-content">
+            <button id="download-images-modal-close" class="modal-close">&times;</button>
+            <h2>Unduh Gambar Terpilih</h2>
+            <p>Klik link di bawah ini satu per satu untuk mengunduh gambar.</p>
+            <ul id="download-links-list"></ul>
+        </div>
+    </div>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // --- Konfigurasi ---
+        const ACCESS_CODE = 'nippori';
+        const SUPABASE_URL = 'https://mgpboaiusadsvbdenrid.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ncGJvYWl1c2Fkc3ZiZGVucmlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY2OTU1OTgsImV4cCI6MjA3MjI3MTU5OH0.tcCbwbVrWGnKH-Fo8IJkOLg2sweM8o2_4YhS5RmVLQE';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // --- State Variables ---
+        let products = [];
+        let productMasters = {};
+        
+        // --- Element Selectors ---
+        const loginSection = document.getElementById('login-section');
+        const mainAppContainer = document.getElementById('main-app');
+        const accessForm = document.getElementById('access-form');
+        const accessCodeInput = document.getElementById('access-code');
+        const accessErrorEl = document.getElementById('access-error');
+        const logoutBtn = document.getElementById('logout-btn');
+        const navLinksList = document.getElementById('nav-links-list');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.content-section');
+        const mobileNavToggle = document.getElementById('mobile-nav-toggle');
+
+        const totalMasterProductsEl = document.getElementById('total-master-products');
+        const totalUniqueVariantsEl = document.getElementById('total-unique-variants');
+        const totalStockItemsEl = document.getElementById('total-stock-items');
+        const totalItemsSoldEl = document.getElementById('total-items-sold');
+        const totalRevenueEl = document.getElementById('total-revenue');
+        const lowStockListEl = document.getElementById('low-stock-list');
+        const lowStockBatchFilter = document.getElementById('low-stock-batch-filter');
+        const lowStockBatchSuggestions = document.getElementById('low-stock-batch-suggestions');
+        const lowStockPaginationContainer = document.getElementById('low-stock-pagination-container');
+        const soldItemsCard = document.getElementById('sold-items-card');
+        const masterProductsCard = document.getElementById('master-products-card');
+        const masterReportModal = document.getElementById('master-report-modal');
+        const masterReportModalList = document.getElementById('master-report-modal-list');
+        const masterReportModalClose = document.getElementById('master-report-modal-close');
+
+        const masterJudulInput = document.getElementById('master-judul');
+        const masterJudulSuggestions = document.getElementById('master-judul-suggestions');
+        const masterGambarInput = document.getElementById('master-gambar');
+        const masterGambarPreview = document.getElementById('master-gambar-preview');
+        const masterKondisiSelect = document.getElementById('master-kondisi');
+        const masterRilisInput = document.getElementById('master-rilis');
+        const masterAsalInput = document.getElementById('master-asal');
+        const masterBrandInput = document.getElementById('master-brand');
+        const brandSuggestions = document.getElementById('brand-suggestions');
+        const fiturCheckboxes = Array.from(document.querySelectorAll('[id^="fitur-"]'));
+        const masterKeteranganInput = document.getElementById('master-keterangan');
+        const saveMasterBtn = document.getElementById('save-master-btn');
+        const duplicateMasterBtn = document.getElementById('duplicate-master-btn');
+        const deleteMasterBtn = document.getElementById('delete-master-btn');
+
+        const judulPilihanInput = document.getElementById('judul-pilihan');
+        const judulPilihanSuggestions = document.getElementById('judul-pilihan-suggestions');
+        const totalVariantInput = document.getElementById('total-variant');
+        const batchMonthPicker = document.getElementById('batch-month-picker');
+        const batchTagInput = document.getElementById('batch-tag');
+        const batchSuggestions = document.getElementById('batch-suggestions');
+        const bulkHargaNormalInput = document.getElementById('bulk-harga-normal');
+        const bulkHargaDiskonInput = document.getElementById('bulk-harga-diskon');
+        const bulkStokInput = document.getElementById('bulk-stok');
+        const variantInputsContainer = document.getElementById('variant-inputs-container');
+        const submitVariantsBtn = document.getElementById('submit-variants-btn');
+        const productListContainer = document.getElementById('product-list-container');
+        const searchInput = document.getElementById('search-input');
+        const batchFilter = document.getElementById('batch-filter');
+        const sortFilter = document.getElementById('sort-filter');
+        const selectAllFilteredCheckbox = document.getElementById('select-all-filtered');
+        const productCounts = document.getElementById('product-counts');
+        const paginationContainer = document.getElementById('pagination-container');
+        const printPdfBtn = document.getElementById('print-pdf-btn');
+        const printThermalBtn = document.getElementById('print-thermal-btn');
+        const downloadImagesBtn = document.getElementById('download-images-btn');
+
+        const descJudulPilihanInput = document.getElementById('desc-judul-pilihan');
+        const descJudulPilihanSuggestions = document.getElementById('desc-judul-pilihan-suggestions');
+        const generatedDescriptionTextarea = document.getElementById('generated-description');
+        const copyDescriptionBtn = document.getElementById('copy-description-btn');
+
+        const imagePopup = document.getElementById('image-popup');
+        const popupImg = document.getElementById('popup-img');
+        const imagePopupClose = document.getElementById('image-popup-close');
+        const editModal = document.getElementById('edit-modal');
+        const editModalClose = document.getElementById('edit-modal-close');
+        const editUuidInput = document.getElementById('edit-uuid');
+        const editVariantNameInput = document.getElementById('edit-variant-name');
+        const editHargaNormalInput = document.getElementById('edit-harga-normal');
+        const editHargaDiskonInput = document.getElementById('edit-harga-diskon');
+        const editStokInput = document.getElementById('edit-stok');
+        const editStokNoteSelect = document.getElementById('edit-stok-note-select');
+        const editStokNoteOtherContainer = document.getElementById('edit-stok-note-other-container');
+        const editStokNoteOtherInput = document.getElementById('edit-stok-note-other');
+        const editBatchInput = document.getElementById('edit-batch');
+        const editLokasiInput = document.getElementById('edit-lokasi');
+        const editBatasMinimumInput = document.getElementById('edit-batas-minimum');
+        const editGambarVariantInput = document.getElementById('edit-gambar-variant');
+        const editGambarPreview = document.getElementById('edit-gambar-preview');
+        const saveEditBtn = document.getElementById('save-edit-btn');
+        const quickAddModal = document.getElementById('quick-add-modal');
+        const quickAddModalClose = document.getElementById('quick-add-modal-close');
+        const quickAddTitle = document.getElementById('quick-add-title');
+        const quickAddJudulInput = document.getElementById('quick-add-judul');
+        const quickAddVariantNameInput = document.getElementById('quick-add-variant-name');
+        const quickAddVariantSuggestions = document.getElementById('quick-add-variant-suggestions');
+        const quickAddStokInput = document.getElementById('quick-add-stok');
+        const quickAddBatchInput = document.getElementById('quick-add-batch');
+        const quickAddHargaNormalInput = document.getElementById('quick-add-harga-normal');
+        const quickAddHargaDiskonInput = document.getElementById('quick-add-harga-diskon');
+        const quickAddGambarInput = document.getElementById('quick-add-gambar');
+        const quickAddSaveBtn = document.getElementById('quick-add-save-btn');
+        const historyModal = document.getElementById('history-modal');
+        const historyModalClose = document.getElementById('history-modal-close');
+        const historyModalTitle = document.getElementById('history-modal-title');
+        const historyModalList = document.getElementById('history-modal-list');
+        const soldItemsModal = document.getElementById('sold-items-modal');
+        const soldItemsModalClose = document.getElementById('sold-items-modal-close');
+        const soldItemsModalList = document.getElementById('sold-items-modal-list');
+        const soldStartDateInput = document.getElementById('sold-start-date');
+        const soldEndDateInput = document.getElementById('sold-end-date');
+        const soldItemsTotalsEl = document.getElementById('sold-items-totals');
+        
+        const masterReportModalList = document.getElementById('master-report-modal-list');
+        const pdfOptionsModal = document.getElementById('pdf-options-modal');
+        const pdfOptionsModalClose = document.getElementById('pdf-options-modal-close');
+        const generatePdfBtn = document.getElementById('generate-pdf-btn');
+        const downloadImagesModal = document.getElementById('download-images-modal');
+        const downloadImagesModalClose = document.getElementById('download-images-modal-close');
+        const downloadLinksList = document.getElementById('download-links-list');
+        
+        // --- Notification System ---
+        const notificationContainer = document.createElement('div');
+        notificationContainer.id = 'notification-container';
+        document.body.appendChild(notificationContainer);
+
+        function showNotification(message, type = 'success') {
+            const notif = document.createElement('div');
+            notif.className = `notification ${type}`;
+            notif.textContent = message;
+            notificationContainer.appendChild(notif);
+            setTimeout(() => { notif.classList.add('show'); }, 10);
+            setTimeout(() => {
+                notif.classList.remove('show');
+                notif.addEventListener('transitionend', () => notif.remove());
+            }, 3000);
+        }
+
+        function toggleModal(modalId, show = true) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = show ? 'flex' : 'none';
+            }
+        }
+
+        // --- Core Functions: Access Logic ---
+        function handleAccess(event) {
+            event.preventDefault();
+            const code = accessCodeInput.value;
+            if (code === ACCESS_CODE) {
+                accessErrorEl.textContent = '';
+                sessionStorage.setItem('authenticated', 'true');
+                showMainApp();
+            } else {
+                accessErrorEl.textContent = 'Kode akses salah.';
+                accessCodeInput.value = '';
+            }
+        }
+
+        function handleLogout() {
+            sessionStorage.removeItem('authenticated');
+            location.reload();
+        }
+
+        async function showMainApp() {
+            loginSection.style.display = 'none';
+            mainAppContainer.classList.add('visible');
+            await loadAllDataFromSupabase();
+            filterAndRenderAll();
+        }
+
+        // --- Core Functions: Data Loading ---
+        async function loadAllDataFromSupabase() {
+            showNotification('Memuat data dari database...', 'info');
+
+            const { data: variantData, error: variantError } = await supabase
+                .from('product_variants')
+                .select(`
+                    *,
+                    product_masters (
+                        id,
+                        title,
+                        main_image_url,
+                        condition,
+                        release_month,
+                        origin,
+                        brand,
+                        features,
+                        description
+                    )
+                `);
+
+            if (variantError) {
+                console.error('Gagal mengambil varian:', variantError);
+                products = [];
+            } else {
+                 products = variantData.map(v => ({
+                    uuid: v.id,
+                    master_id: v.master_id,
+                    judul: v.product_masters?.title,
+                    variant: v.variant_name,
+                    stok: v.stock,
+                    batchTag: v.batch_tag,
+                    gambar: v.variant_image_url,
+                    kode: v.product_code,
+                    lokasi: v.location,
+                    batasMinimum: v.min_stock_limit,
+                    hargaNormal: v.normal_price,
+                    hargaDiskon: v.discount_price,
+                    lastModified: v.created_at,
+                 }));
+            }
+
+            const { data: masterData, error: masterError } = await supabase
+                .from('product_masters')
+                .select('*');
+
+            if (masterError) {
+                console.error('Gagal mengambil master:', masterError);
+                productMasters = {};
+            } else {
+                productMasters = masterData.reduce((acc, master) => {
+                    acc[master.title] = {
+                        id: master.id,
+                        gambar: master.main_image_url,
+                        kondisi: master.condition,
+                        rilis: master.release_month,
+                        asal: master.origin,
+                        brand: master.brand,
+                        fitur: master.features,
+                        keterangan: master.description,
+                        createdAt: master.created_at,
+                        lastModified: master.created_at
+                    };
+                    return acc;
+                }, {});
+            }
+            showNotification('Data berhasil dimuat!', 'success');
+        }
+
+        // --- Navigation Logic ---
+        function addNavLinksEventListeners() {
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', e => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href').substring(1);
+                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                    document.querySelectorAll('.content-section').forEach(s => s.classList.toggle('active', s.id === targetId));
+                    if (window.innerWidth <= 768) {
+                        navLinksList.classList.remove('open');
+                    }
+                    filterAndRenderAll();
+                });
+            });
+        }
+        
+        // --- Core Functions: UI & Logic ---
+        const populateMasterForm = (judul) => {
+            const masterData = productMasters[judul];
+            if (!masterData) {
+                masterGambarInput.value = '';
+                masterGambarPreview.src = '';
+                masterGambarPreview.style.display = 'none';
+                masterKondisiSelect.value = 'New';
+                masterRilisInput.value = '';
+                masterAsalInput.value = 'Jepang';
+                masterBrandInput.value = 'Bandai';
+                fiturCheckboxes.forEach(cb => cb.checked = true);
+                masterKeteranganInput.value = '';
+                return;
+            }
+            masterGambarPreview.src = masterData.gambar || '';
+            masterGambarPreview.style.display = masterData.gambar ? 'block' : 'none';
+            masterKondisiSelect.value = masterData.kondisi || 'New';
+            masterRilisInput.value = masterData.rilis || '';
+            masterAsalInput.value = masterData.asal || '';
+            masterBrandInput.value = masterData.brand || '';
+            masterKeteranganInput.value = masterData.keterangan || '';
+            fiturCheckboxes.forEach(cb => {
+                cb.checked = (masterData.fitur || []).includes(cb.value);
+            });
+        };
+        
+        const updateAllSuggestions = () => {
+            const titles = Object.keys(productMasters);
+            const titleOptions = titles.map(t => `<option value="${t}"></option>`).join('');
+            masterJudulSuggestions.innerHTML = titleOptions;
+            judulPilihanSuggestions.innerHTML = titleOptions;
+            descJudulPilihanSuggestions.innerHTML = titleOptions;
+            
+            const uniqueBrands = [...new Set(Object.values(productMasters).map(m => m.brand).filter(Boolean))];
+            brandSuggestions.innerHTML = uniqueBrands.map(b => `<option value="${b}"></option>`).join('');
+
+            const uniqueBatches = [...new Set(products.map(p => p.batchTag).filter(Boolean))];
+            batchSuggestions.innerHTML = uniqueBatches.map(b => `<option value="${b}"></option>`).join('');
+        };
+        
+        const updateCounts = () => {
+            const totalVariants = products.length;
+            const displayedVariants = productListContainer.querySelectorAll('.variant-item').length;
+            const selectedVariants = productListContainer.querySelectorAll('.variant-checkbox:checked').length;
+            productCounts.innerHTML = `Total Varian: <strong>${totalVariants}</strong> | Ditampilkan: <strong>${displayedVariants}</strong> | Dipilih: <strong>${selectedVariants}</strong>`;
+        };
+        
+        const getFilteredAndSortedProducts = () => {
+            let productsToRender = [...products];
+            const searchTerm = searchInput.value.toLowerCase();
+            const selectedBatch = batchFilter.value;
+            const sortOrder = sortFilter.value;
+
+            productsToRender.sort((a, b) => {
+                const dateA = new Date(a.lastModified).getTime();
+                const dateB = new Date(b.lastModified).getTime();
+                return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+            });
+
+            if (selectedBatch) {
+                productsToRender = productsToRender.filter(p => p.batchTag === selectedBatch);
+            }
+
+            if (searchTerm) {
+                productsToRender = productsToRender.filter(p => 
+                    (p.judul.toLowerCase().includes(searchTerm)) ||
+                    (p.variant.toLowerCase().includes(searchTerm)) ||
+                    (p.kode && p.kode.toLowerCase().includes(searchTerm)) ||
+                    (p.batchTag && p.batchTag.toLowerCase().includes(searchTerm))
+                );
+            }
+            return productsToRender;
+        };
+        
+        const renderDashboard = () => {
+            const lowStockProducts = products.filter(p => p.stok <= p.batasMinimum);
+            lowStockListEl.innerHTML = lowStockProducts.map(p => `<li>${p.judul} - ${p.variant} (Stok: ${p.stok})</li>`).join('') || `<li>Tidak ada produk yang stoknya menipis.</li>`;
+
+            totalMasterProductsEl.textContent = Object.keys(productMasters).length;
+            totalUniqueVariantsEl.textContent = products.length;
+            totalStockItemsEl.textContent = products.reduce((sum, p) => sum + (p.stok || 0), 0);
+            totalItemsSoldEl.textContent = 'N/A';
+            totalRevenueEl.textContent = 'Rp N/A';
+        };
+        
+        const renderProductList = () => {
+            const filteredProducts = getFilteredAndSortedProducts();
+            const groupedByBatch = filteredProducts.reduce((acc, p) => {
+                const batchKey = p.batchTag || 'Tanpa Batch';
+                if (!acc[batchKey]) acc[batchKey] = {};
+                if (!acc[batchKey][p.judul]) acc[batchKey][p.judul] = [];
+                acc[batchKey][p.judul].push(p);
+                return acc;
+            }, {});
+            
+            productListContainer.innerHTML = '';
+
+            Object.keys(groupedByBatch).forEach(batch => {
+                const batchContainer = document.createElement('div');
+                batchContainer.innerHTML = `<h2 class="batch-header">Batch: ${batch}</h2>`;
+                
+                const productsInBatch = groupedByBatch[batch];
+                for (const judul in productsInBatch) {
+                    const master = productMasters[judul] || {};
+                    const variants = productsInBatch[judul];
+                    const groupCard = document.createElement('div');
+                    groupCard.className = 'product-group-card';
+                    
+                    let variantsHTML = '';
+                    variants.forEach(v => {
+                        const lowStockClass = (v.stok <= (v.batasMinimum || 0)) ? 'low-stock' : '';
+                        let priceHTML = `<div class="price-display"><strong>${new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(v.hargaNormal || 0)}</strong></div>`;
+                        if (v.hargaDiskon > 0 && v.hargaDiskon < v.hargaNormal) {
+                            const diskon = Math.round(((v.hargaNormal - v.hargaDiskon) / v.hargaNormal) * 100);
+                            priceHTML = `<div class="price-display"><span class="price-diskon">${new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(v.hargaDiskon)}</span><span class="price-normal">${new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(v.hargaNormal)}</span><span class="diskon-badge">${diskon}%</span></div>`;
+                        }
+
+                        variantsHTML += `
+                            <li class="variant-item ${lowStockClass}" data-uuid="${v.uuid}">
+                                <img src="${v.gambar || 'https://placehold.co/40x40/e0e0e0/555?text=...'}" class="variant-image image-preview-trigger" data-img-src="${v.gambar || ''}">
+                                <div class="variant-details">
+                                    <p><strong>${v.variant}</strong></p>
+                                    ${priceHTML}
+                                    <p>Stok: ${v.stok} | Lokasi: ${v.lokasi || '-'}</p>
+                                    <p style="font-size: 0.8em; color: #6c757d;">Kode: ${v.kode || 'N/A'}</p>
+                                </div>
+                                <div class="variant-actions">
+                                    <button class="action-btn history-btn">Riwayat</button>
+                                    <button class="action-btn edit-btn">Edit</button>
+                                    <button class="action-btn delete-btn">Hapus</button>
+                                    <input type="checkbox" class="variant-checkbox" data-uuid="${v.uuid}">
+                                </div>
+                            </li>
+                        `;
+                    });
+
+                    groupCard.innerHTML = `
+                        <div class="group-header">
+                            <img src="${master.gambar || 'https://placehold.co/60x60/e0e0e0/555?text=NoImg'}" class="group-image image-preview-trigger" data-img-src="${master.gambar || ''}">
+                            <div class="group-title">${judul}</div>
+                            <span class="group-toggle-icon">&#9654;</span>
+                            <button class="action-btn quick-add-btn" data-judul="${judul}">+</button>
+                            <button class="action-btn delete-btn group-delete-btn" data-judul="${judul}">Hapus Grup</button>
+                            <input type="checkbox" class="group-checkbox" data-judul="${judul}">
+                        </div>
+                        <ul class="variant-list">${variantsHTML}</ul>
+                    `;
+                    batchContainer.appendChild(groupCard);
+                }
+                productListContainer.appendChild(batchContainer);
+            });
+            updateCounts();
+        };
+
+        const handleImageUpload = async (fileInput, fileName) => {
+            const file = fileInput.files[0];
+            if (!file) {
+                 return null;
+            }
+            if (file.size > 2 * 1024 * 1024) {
+                showNotification('Ukuran gambar terlalu besar (maks 2MB).', 'error');
+                return null;
+            }
+            const cleanedFileName = fileName.replace(/[^a-zA-Z0-9-.]/g, '_');
+            const { error } = await supabase.storage.from('product-images').upload(cleanedFileName, file, { upsert: true });
+            if (error) {
+                showNotification(`Gagal unggah gambar: ${error.message}`, 'error');
+                return null;
+            }
+            const { data: { publicUrl } } = supabase.storage.from('product-images').getPublicUrl(cleanedFileName);
+            return publicUrl;
+        };
+        
+        function generateDescription() {
+            const judul = descJudulPilihanInput.value;
+            const masterData = productMasters[judul];
+            if (!masterData) {
+                generatedDescriptionTextarea.value = 'Pilih judul produk terlebih dahulu.';
+                return;
+            }
+            
+            const variants = products.filter(p => p.judul === judul);
+            const features = masterData.fitur ? masterData.fitur.map(f => `- ${f}`).join('\n') : '- Tidak ada fitur khusus';
+            const variantList = variants.map(v => `${v.variant}`).join('\n');
+            
+            let description = `✨ ${judul} ✨\n`;
+            description += `-------------------------------------\n`;
+            description += `Kondisi: ${masterData.kondisi || 'N/A'}\n`;
+            description += `Rilis: ${masterData.rilis || 'N/A'}\n`;
+            description += `Asal: ${masterData.asal || 'N/A'}\n`;
+            description += `Brand: ${masterData.brand || 'N/A'}\n\n`;
+            
+            if (variantList) {
+                 description += `Varian:\n${variantList}\n\n`;
+            }
+
+            description += `Fitur Produk:\n${features}\n\n`;
+            
+            if (masterData.keterangan) {
+                 description += `Keterangan Tambahan:\n${masterData.keterangan}\n`;
+            }
+            description += `-------------------------------------\n`;
+
+            generatedDescriptionTextarea.value = description.trim();
+        }
+
+        saveMasterBtn.addEventListener('click', async () => {
+            const judul = masterJudulInput.value.trim();
+            if (!judul) { showNotification('Judul produk tidak boleh kosong.', 'error'); return; }
+
+            const selectedFeatures = fiturCheckboxes.filter(cb => cb.checked).map(cb => cb.value);
+            
+            const imageName = `master-${Date.now()}`;
+            const imageUrl = await handleImageUpload(masterGambarInput, imageName);
+
+            const masterPayload = {
+                title: judul,
+                condition: masterKondisiSelect.value,
+                release_month: masterRilisInput.value || null,
+                origin: masterAsalInput.value,
+                brand: masterBrandInput.value,
+                features: selectedFeatures,
+                description: masterKeteranganInput.value.trim(),
+                main_image_url: imageUrl || productMasters[judul]?.gambar
+            };
+
+            const { error } = await supabase.from('product_masters').upsert(masterPayload, { onConflict: 'title' });
+            
+            if (error) {
+                showNotification(`Gagal simpan master: ${error.message}`, 'error');
+            } else {
+                showNotification(`Master produk "${judul}" berhasil disimpan!`);
+                await loadAllDataFromSupabase();
+                filterAndRenderAll();
+                masterJudulInput.value = '';
+                populateMasterForm('');
+            }
+        });
+
+        function generateBatchTag() {
+            const month = batchMonthPicker.value;
+            if (!month) {
+                batchTagInput.value = '';
+                return;
+            }
+            const date = new Date(month + '-01');
+            const monthName = date.toLocaleString('id-ID', { month: 'short' }).toUpperCase();
+            const year = date.getFullYear().toString().slice(-2);
+            batchTagInput.value = `${monthName}${year}-`;
+        }
+        
+        async function renderMasterReportModal() {
+            masterReportModalList.innerHTML = '';
+            
+            const masterList = Object.values(productMasters);
+            if(masterList.length === 0){
+                masterReportModalList.innerHTML = '<p>Tidak ada produk master.</p>';
+                return;
+            }
+
+            let html = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>Judul</th>
+                        <th>Kondisi</th>
+                        <th>Rilis</th>
+                        <th>Brand</th>
+                    </tr>
+                </thead>
+                <tbody>
+            `;
+            
+            masterList.forEach(master => {
+                html += `
+                <tr>
+                    <td>${master.title}</td>
+                    <td>${master.condition}</td>
+                    <td>${master.release_month || '-'}</td>
+                    <td>${master.brand || '-'}</td>
+                </tr>
+                `;
+            });
+            html += `
+                </tbody>
+            </table>
+            `;
+            masterReportModalList.innerHTML = html;
+        }
+
+        // --- NEW CODE FOR VARIANT INPUTS ---
+        function generateVariantInputs() {
+            const total = parseInt(totalVariantInput.value);
+            const judul = judulPilihanInput.value.trim();
+            if (!judul) {
+                showNotification('Pilih Judul Produk terlebih dahulu.', 'error');
+                totalVariantInput.value = '';
+                return;
+            }
+            if (total < 1 || isNaN(total)) {
+                variantInputsContainer.innerHTML = '';
+                submitVariantsBtn.style.display = 'none';
+                return;
+            }
+            let html = '';
+            for (let i = 0; i < total; i++) {
+                html += `
+                    <div class="variant-input-group">
+                        <div style="display: flex; justify-content: space-between;">
+                            <h4>Varian #${i + 1}</h4>
+                            <button type="button" class="action-btn delete-btn" onclick="this.parentElement.parentElement.remove()">Hapus</button>
+                        </div>
+                        <div class="form-group"><label>Nama Varian:</label><input type="text" class="variant-name" required></div>
+                        <div class="price-group">
+                            <div class="form-group"><label>Harga Normal:</label><input type="number" class="variant-harga-normal" min="0" value="${bulkHargaNormalInput.value || ''}"></div>
+                            <div class="form-group"><label>Harga Diskon:</label><input type="number" class="variant-harga-diskon" min="0" value="${bulkHargaDiskonInput.value || ''}"></div>
+                        </div>
+                        <div class="form-group"><label>Stok:</label><input type="number" class="variant-stok" min="0" value="${bulkStokInput.value || ''}" required></div>
+                        <div class="form-group"><label>Lokasi Fisik (Opsional):</label><input type="text" class="variant-lokasi"></div>
+                        <div class="form-group"><label>Gambar Varian (Opsional):</label><input type="file" class="variant-gambar" accept="image/*"></div>
+                    </div>
+                `;
+            }
+            variantInputsContainer.innerHTML = html;
+            submitVariantsBtn.style.display = 'block';
+        }
+
+        async function submitVariants() {
+            const judul = judulPilihanInput.value.trim();
+            const masterId = productMasters[judul]?.id;
+            if (!masterId) {
+                showNotification('Judul produk tidak valid.', 'error');
+                return;
+            }
+
+            const batchTag = batchTagInput.value.trim() || `Batch-${new Date(batchMonthPicker.value).toLocaleString('id-ID', { month: 'short', year: 'numeric' })}`;
+            const variantGroups = document.querySelectorAll('.variant-input-group');
+            const variantsToInsert = [];
+            const imagesToUpload = [];
+
+            for (const group of variantGroups) {
+                const variantName = group.querySelector('.variant-name').value.trim();
+                const stok = parseInt(group.querySelector('.variant-stok').value);
+                const hargaNormal = parseFloat(group.querySelector('.variant-harga-normal').value);
+                const hargaDiskon = parseFloat(group.querySelector('.variant-harga-diskon').value);
+                const lokasi = group.querySelector('.variant-lokasi').value.trim();
+                const gambarFile = group.querySelector('.variant-gambar').files[0];
+
+                if (!variantName || isNaN(stok)) {
+                    showNotification('Nama varian dan stok harus diisi.', 'error');
+                    return;
+                }
+                
+                let imageUrl = null;
+                if (gambarFile) {
+                    const imageName = `${masterId}-${variantName}-${Date.now()}`;
+                    imagesToUpload.push({ file: gambarFile, name: imageName });
+                    imageUrl = supabase.storage.from('product-images').getPublicUrl(imageName).data.publicUrl;
+                }
+                
+                variantsToInsert.push({
+                    master_id: masterId,
+                    variant_name: variantName,
+                    stock: stok,
+                    normal_price: hargaNormal || 0,
+                    discount_price: hargaDiskon || 0,
+                    location: lokasi,
+                    batch_tag: batchTag,
+                    variant_image_url: imageUrl,
+                    product_code: `${masterId.substring(0, 4)}-${variantName.replace(/\s/g, '').toLowerCase()}`
+                });
+            }
+            
+            const uploadPromises = imagesToUpload.map(img =>
+                supabase.storage.from('product-images').upload(img.name, img.file)
+            );
+            await Promise.all(uploadPromises);
+
+            const { error } = await supabase.from('product_variants').insert(variantsToInsert);
+
+            if (error) {
+                showNotification(`Gagal simpan varian: ${error.message}`, 'error');
+            } else {
+                showNotification(`Semua varian berhasil disimpan!`);
+                await loadAllDataFromSupabase();
+                filterAndRenderAll();
+                variantInputsContainer.innerHTML = '';
+                submitVariantsBtn.style.display = 'none';
+                judulPilihanInput.value = '';
+                totalVariantInput.value = '';
+            }
+        }
+        
+        // Event listeners
+        masterJudulInput.addEventListener('input', () => {
+            populateMasterForm(masterJudulInput.value);
+        });
+        
+        judulPilihanInput.addEventListener('input', () => {
+            generateVariantInputs();
+        });
+        totalVariantInput.addEventListener('input', generateVariantInputs);
+        batchMonthPicker.addEventListener('input', generateBatchTag);
+        
+        bulkHargaNormalInput.addEventListener('input', () => {
+            document.querySelectorAll('.variant-harga-normal').forEach(input => input.value = bulkHargaNormalInput.value);
+        });
+        bulkHargaDiskonInput.addEventListener('input', () => {
+            document.querySelectorAll('.variant-harga-diskon').forEach(input => input.value = bulkHargaDiskonInput.value);
+        });
+        bulkStokInput.addEventListener('input', () => {
+            document.querySelectorAll('.variant-stok').forEach(input => input.value = bulkStokInput.value);
+        });
+        submitVariantsBtn.addEventListener('click', submitVariants);
+        
+        descJudulPilihanInput.addEventListener('input', generateDescription);
+        copyDescriptionBtn.addEventListener('click', () => {
+            generatedDescriptionTextarea.select();
+            document.execCommand('copy');
+            showNotification('Deskripsi berhasil disalin!', 'success');
+        });
+        
+        // Event listeners for Modals and Popups
+        document.addEventListener('click', (e) => {
+            // Image popup
+            if (e.target.classList.contains('image-preview-trigger')) {
+                popupImg.src = e.target.dataset.imgSrc || 'https://placehold.co/400x400/e0e0e0/555?text=No+Image';
+                toggleModal('image-popup', true);
+            }
+            if (e.target.id === 'image-popup-close') {
+                toggleModal('image-popup', false);
+            }
+            if (e.target.id === 'master-products-card') {
+                renderMasterReportModal();
+                toggleModal('master-report-modal', true);
+            }
+            if (e.target.id === 'master-report-modal-close') {
+                toggleModal('master-report-modal', false);
+            }
+            if (e.target.id === 'sold-items-card') {
+                // TODO: Implement sold items modal logic
+                openModal('sold-items-modal');
+            }
+            if (e.target.id === 'sold-items-modal-close') {
+                closeModal('sold-items-modal');
+            }
+            // Group collapse
+            if (e.target.classList.contains('group-header')) {
+                const groupCard = e.target.closest('.product-group-card');
+                groupCard.classList.toggle('expanded');
+            }
+            // Checkbox actions
+            if (e.target.classList.contains('group-checkbox')) {
+                const groupCard = e.target.closest('.product-group-card');
+                const isChecked = e.target.checked;
+                groupCard.querySelectorAll('.variant-checkbox').forEach(cb => cb.checked = isChecked);
+            }
+            if (e.target.id === 'select-all-filtered') {
+                const isChecked = e.target.checked;
+                document.querySelectorAll('.variant-checkbox').forEach(cb => cb.checked = isChecked);
+            }
+            if (e.target.matches('.variant-actions .delete-btn')) {
+                const uuid = e.target.closest('.variant-item').dataset.uuid;
+                if (confirm('Yakin ingin menghapus varian ini?')) {
+                    deleteVariant(uuid);
+                }
+            }
+        });
+
+        async function deleteVariant(uuid) {
+            const { error } = await supabase.from('product_variants').delete().eq('id', uuid);
+            if (error) {
+                showNotification('Gagal menghapus varian: ' + error.message, 'error');
+            } else {
+                showNotification('Varian berhasil dihapus!');
+                await loadAllDataFromSupabase();
+                filterAndRenderAll();
+            }
+        }
+
+        // Event listener for mobile navigation toggle
+        if (mobileNavToggle) {
+            mobileNavToggle.addEventListener('click', () => {
+                navLinksList.classList.toggle('open');
+            });
+        }
+        
+        // General function to re-render the view
+        window.filterAndRenderAll = () => {
+            const activeSectionId = document.querySelector('.content-section.active')?.id;
+            if (!activeSectionId) return;
+
+            if (activeSectionId === 'dashboard') {
+                renderDashboard();
+            } else if (activeSectionId === 'data-list') {
+                renderProductList();
+            } else if (activeSectionId === 'deskripsi') {
+                generateDescription();
+            }
+            updateAllSuggestions();
+        };
+
+        // --- Initial Setup & Event Listeners ---
+        accessForm.addEventListener('submit', handleAccess);
+        logoutBtn.addEventListener('click', handleLogout);
+        addNavLinksEventListeners();
+        
+        // Cek apakah pengguna sudah login sebelumnya
+        if (sessionStorage.getItem('authenticated') === 'true') {
+            showMainApp();
+        } else {
+            loginSection.style.display = 'flex';
+        }
+
+        // Redirect to dashboard on initial load
+        document.querySelector('.nav-links a[href="#dashboard"]').click();
+    });
+</script><!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -308,9 +1433,9 @@ functions should be inside `document.addEventListener('DOMContentLoaded', () => 
     <link rel="icon" href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/BDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wgARCAAoACgDAREAAhEBAxEB/8QAHAABAAICAwEAAAAAAAAAAAAAAAYHBAUBAgMI/8QAGQEBAQEBAQEAAAAAAAAAAAAAAAECAwQG/9oADAMBAAIQAxAAAAP3wAAAAA4c2s3G9Z58S2lT1vEa4SklLqV7dE4+lQAAAAAP/EACQQAQACAQIGAgMAAAAAAAAAAAUDBAYBAgcIERITFCEiMTJR/9oACAEBAAEFAv68FvHkPqL5e22T2K+Poe36S9s6Pj+hL3fR2z+m/pG7RkPqL+Y7rG/c55e67R2K+Xuv0v6S9u6Pj+h/3fR2wum/pG794//xAAUEQEAAAAAAAAAAAAAAAAAAAAg/9oACAEDAQE/AR//xAAUEQEAAAAAAAAAAAAAAAAAAAAg/9oACAECAQE/AR//xAAsEAABAgIABAQGAwAAAAAAAAABAgMEAAUREhMhFCAxUVIQIiMyQUNQYXHB/9oACAEBAAY/Av2K7V94w3g4xU4gY6g/QxhvAxeoP0cYbwMvUF+jjDeBle/X6OMN4GV78v0cYaX2q7V9oQ3gYzUF+jjDeBjNQv0cYaXv8v0cYaXvy/RxhpfbL9HGGl9qufeEN4GJ1Bfo4w3gYnUv6OMNL7JfY4w0vtl9jjDS92X6OMNL3Zfo4w0vtl9jjDS+1Xav/2Q==" type="image/jpeg">
     <link rel="manifest" href="manifest.json">
 
-    <script src="[https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2](https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2)"></script>
-    <script src="[https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js](https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js)"></script>
-    <script src="[https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js](https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js)"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root {
             --nippori-blue: #1E2A4D;
@@ -944,7 +2069,7 @@ functions should be inside `document.addEventListener('DOMContentLoaded', () => 
 
         // --- Konfigurasi ---
         const ACCESS_CODE = 'nippori';
-        const SUPABASE_URL = '[https://mgpboaiusadsvbdenrid.supabase.co](https://mgpboaiusadsvbdenrid.supabase.co)';
+        const SUPABASE_URL = 'https://mgpboaiusadsvbdenrid.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ncGJvYWl1c2Fkc3ZiZGVucmlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY2OTU1OTgsImV4cCI6MjA3MjI3MTU5OH0.tcCbwbVrWGnKH-Fo8IJkOLg2sweM8o2_4YhS5RmVLQE';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -964,7 +2089,6 @@ functions should be inside `document.addEventListener('DOMContentLoaded', () => 
         const sections = document.querySelectorAll('.content-section');
         const mobileNavToggle = document.getElementById('mobile-nav-toggle');
 
-        // Variabel untuk Dashboard
         const totalMasterProductsEl = document.getElementById('total-master-products');
         const totalUniqueVariantsEl = document.getElementById('total-unique-variants');
         const totalStockItemsEl = document.getElementById('total-stock-items');
@@ -980,7 +2104,6 @@ functions should be inside `document.addEventListener('DOMContentLoaded', () => 
         const masterReportModalList = document.getElementById('master-report-modal-list');
         const masterReportModalClose = document.getElementById('master-report-modal-close');
 
-        // Variabel untuk Produk
         const masterJudulInput = document.getElementById('master-judul');
         const masterJudulSuggestions = document.getElementById('master-judul-suggestions');
         const masterGambarInput = document.getElementById('master-gambar');
@@ -996,7 +2119,6 @@ functions should be inside `document.addEventListener('DOMContentLoaded', () => 
         const duplicateMasterBtn = document.getElementById('duplicate-master-btn');
         const deleteMasterBtn = document.getElementById('delete-master-btn');
 
-        // Variabel untuk Data List
         const judulPilihanInput = document.getElementById('judul-pilihan');
         const judulPilihanSuggestions = document.getElementById('judul-pilihan-suggestions');
         const totalVariantInput = document.getElementById('total-variant');
@@ -1019,13 +2141,11 @@ functions should be inside `document.addEventListener('DOMContentLoaded', () => 
         const printThermalBtn = document.getElementById('print-thermal-btn');
         const downloadImagesBtn = document.getElementById('download-images-btn');
 
-        // Variabel untuk Deskripsi
         const descJudulPilihanInput = document.getElementById('desc-judul-pilihan');
         const descJudulPilihanSuggestions = document.getElementById('desc-judul-pilihan-suggestions');
         const generatedDescriptionTextarea = document.getElementById('generated-description');
         const copyDescriptionBtn = document.getElementById('copy-description-btn');
 
-        // Variabel untuk Modal & Popup
         const imagePopup = document.getElementById('image-popup');
         const popupImg = document.getElementById('popup-img');
         const imagePopupClose = document.getElementById('image-popup-close');
@@ -1332,7 +2452,7 @@ functions should be inside `document.addEventListener('DOMContentLoaded', () => 
 
                         variantsHTML += `
                             <li class="variant-item ${lowStockClass}" data-uuid="${v.uuid}">
-                                <img src="${v.gambar || '[https://placehold.co/40x40/e0e0e0/555?text=](https://placehold.co/40x40/e0e0e0/555?text=)...'}" class="variant-image image-preview-trigger" data-img-src="${v.gambar || ''}">
+                                <img src="${v.gambar || 'https://placehold.co/40x40/e0e0e0/555?text=...'}" class="variant-image image-preview-trigger" data-img-src="${v.gambar || ''}">
                                 <div class="variant-details">
                                     <p><strong>${v.variant}</strong></p>
                                     ${priceHTML}
@@ -1351,7 +2471,7 @@ functions should be inside `document.addEventListener('DOMContentLoaded', () => 
 
                     groupCard.innerHTML = `
                         <div class="group-header">
-                            <img src="${master.gambar || '[https://placehold.co/60x60/e0e0e0/555?text=NoImg](https://placehold.co/60x60/e0e0e0/555?text=NoImg)'}" class="group-image image-preview-trigger" data-img-src="${master.gambar || ''}">
+                            <img src="${master.gambar || 'https://placehold.co/60x60/e0e0e0/555?text=NoImg'}" class="group-image image-preview-trigger" data-img-src="${master.gambar || ''}">
                             <div class="group-title">${judul}</div>
                             <span class="group-toggle-icon">&#9654;</span>
                             <button class="action-btn quick-add-btn" data-judul="${judul}">+</button>
@@ -1639,7 +2759,7 @@ functions should be inside `document.addEventListener('DOMContentLoaded', () => 
         document.addEventListener('click', (e) => {
             // Image popup
             if (e.target.classList.contains('image-preview-trigger')) {
-                popupImg.src = e.target.dataset.imgSrc || '[https://placehold.co/400x400/e0e0e0/555?text=No+Image](https://placehold.co/400x400/e0e0e0/555?text=No+Image)';
+                popupImg.src = e.target.dataset.imgSrc || 'https://placehold.co/400x400/e0e0e0/555?text=No+Image';
                 toggleModal('image-popup', true);
             }
             if (e.target.id === 'image-popup-close') {
@@ -1731,8 +2851,5 @@ functions should be inside `document.addEventListener('DOMContentLoaded', () => 
         document.querySelector('.nav-links a[href="#dashboard"]').click();
     });
 </script>
-</body>
-        </div>
-    </section>
 </body>
 </html>
