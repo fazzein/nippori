@@ -1038,7 +1038,6 @@
                     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
                     link.classList.add('active');
                     document.querySelectorAll('.content-section').forEach(s => s.classList.toggle('active', s.id === targetId));
-                    // Close mobile nav on click
                     if (window.innerWidth <= 768) {
                         navLinksList.classList.remove('open');
                     }
@@ -1205,7 +1204,6 @@
         const handleImageUpload = async (fileInput, fileName) => {
             const file = fileInput.files[0];
             if (!file) {
-                 // Return null if no file is selected, do not show an error
                  return null;
             }
 
@@ -1214,7 +1212,6 @@
                 return null;
             }
             
-            // Perbaikan: Pastikan nama file unik dan tidak ada karakter yang bermasalah
             const cleanedFileName = fileName.replace(/[^a-zA-Z0-9-.]/g, '_');
             
             const { error } = await supabase.storage
@@ -1350,13 +1347,11 @@
                 });
             }
             
-            // Lakukan unggahan gambar terlebih dahulu
             const uploadPromises = imagesToUpload.map(img =>
                 supabase.storage.from('product-images').upload(img.name, img.file)
             );
             await Promise.all(uploadPromises);
 
-            // Simpan varian ke database
             const { error } = await supabase.from('product_variants').insert(variantsToInsert);
 
             if (error) {
