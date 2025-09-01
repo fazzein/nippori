@@ -765,8 +765,8 @@
     document.addEventListener('DOMContentLoaded', () => {
 
         // --- Supabase Client & Configuration ---
-        const supabaseUrl = 'https://gscvuwzqdywkbmyhohju.supabase.co'; // GANTI DENGAN URL PROYEK ANDA
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzY3Z1d3pxZHl3a2JteWhvaGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY3Mzc5NjgsImV4cCI6MjA3MjMxMzk2OH0.0TNw27sUI4BerA8qog9uPghdjjvcJ9wAgXIT79dkG7E'; // GANTI DENGAN ANON KEY PROYEK ANDA
+        const supabaseUrl = 'https://gscvuwzqdywkbmyhohju.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzY3Z1d3pxZHl3a2JteWhvaGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY3Mzc5NjgsImV4cCI6MjA3MjMxMzk2OH0.0TNw27sUI4BerA8qog9uPghdjjvcJ9wAgXIT79dkG7E';
         const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
         // --- Data Stores (Supabase-driven now) ---
@@ -1045,7 +1045,7 @@
         };
 
         const populateMasterForm = (judul) => {
-            const masterData = productMasters[judul];
+            const masterData = productMasters[judul]?.data;
             if (!masterData) {
                 masterGambarInput.value = '';
                 masterGambarPreview.src = '';
@@ -1081,7 +1081,7 @@
             judulPilihanSuggestions.innerHTML = titleOptions;
             descJudulPilihanSuggestions.innerHTML = titleOptions;
             
-            const uniqueBrands = [...new Set(Object.values(productMasters).map(m => m.brand).filter(Boolean))];
+            const uniqueBrands = [...new Set(Object.values(productMasters).map(m => m.data.brand).filter(Boolean))];
             brandSuggestions.innerHTML = uniqueBrands.map(b => `<option value="${b}"></option>`).join('');
 
             const uniqueBatches = [...new Set(products.map(p => p.data.batchTag).filter(Boolean))];
@@ -2344,4 +2344,3 @@
     </script>
 </body>
 </html>
-
