@@ -723,24 +723,7 @@
         <div class="modal-inner-content">
             <button id="master-report-modal-close" class="modal-close">&times;</button>
             <h2>Laporan Produk Master</h2>
-            <div class="filter-container">
-                <div class="form-group">
-                    <label for="master-report-sort">Urutkan</label>
-                    <select id="master-report-sort">
-                        <option value="desc">Terbaru</option>
-                        <option value="asc">Terlama</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="master-report-rilis-start">Rilis Dari</label>
-                    <input type="month" id="master-report-rilis-start">
-                </div>
-                <div class="form-group">
-                    <label for="master-report-rilis-end">Rilis Sampai</label>
-                    <input type="month" id="master-report-rilis-end">
-                </div>
-            </div>
-            <ul id="master-report-modal-list" class="master-report-list"></ul>
+            <div id="master-report-modal-list" class="master-report-list"></div>
         </div>
     </div>
     <div id="pdf-options-modal" class="modal-overlay">
@@ -1202,32 +1185,26 @@
             });
             updateCounts();
         };
-        
-        // --- NEW CODE FOR MODAL HANDLERS ---
-        function openModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) modal.style.display = 'flex';
-        }
 
-        function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) modal.style.display = 'none';
-        }
-
-        // --- NEW CODE FOR BATCH GENERATION ---
-        function generateBatchTag() {
-            const month = batchMonthPicker.value;
-            if (!month) {
-                batchTagInput.value = '';
-                return;
+        const handleImageUpload = async (fileInput, fileName) => {
+            const file = fileInput.files[0];
+            if (!file) {
+                 return null;
             }
-            const date = new Date(month + '-01');
-            const monthName = date.toLocaleString('id-ID', { month: 'short' }).toUpperCase();
-            const year = date.getFullYear().toString().slice(-2);
-            batchTagInput.value = `${monthName}${year}-`;
-        }
-
-        // --- NEW CODE FOR DESCRIPTION GENERATION ---
+            if (file.size > 2 * 1024 * 1024) {
+                showNotification('Ukuran gambar terlalu besar (maks 2MB).', 'error');
+                return null;
+            }
+            const cleanedFileName = fileName.replace(/[^a-zA-Z0-9-.]/g, '_');
+            const { error } = await supabase.storage.from('product-images').upload(cleanedFileName, file, { upsert: true });
+            if (error) {
+                showNotification(`Gagal unggah gambar: ${error.message}`, 'error');
+                return null;
+            }
+            const { data: { publicUrl } } = supabase.storage.from('product-images').getPublicUrl(cleanedFileName);
+            return publicUrl;
+        };
+        
         function generateDescription() {
             const judul = descJudulPilihanInput.value;
             const masterData = productMasters[judul];
@@ -1261,32 +1238,15 @@ ${variantList}
             generatedDescriptionTextarea.value = description.trim();
         }
 
-        // --- Handle Image Uploads ---
-        const handleImageUpload = async (fileInput, fileName) => {
-            const file = fileInput.files[0];
-            if (!file) {
-                return null;
-            }
-            if (file.size > 2 * 1024 * 1024) {
-                showNotification('Ukuran gambar terlalu besar (maks 2MB).', 'error');
-                return null;
-            }
-            const cleanedFileName = fileName.replace(/[^a-zA-Z0-9-.]/g, '_');
-            const { error } = await supabase.storage.from('product-images').upload(cleanedFileName, file, { upsert: true });
-            if (error) {
-                showNotification(`Gagal unggah gambar: ${error.message}`, 'error');
-                return null;
-            }
-            const { data: { publicUrl } } = supabase.storage.from('product-images').getPublicUrl(cleanedFileName);
-            return publicUrl;
-        };
-
         saveMasterBtn.addEventListener('click', async () => {
             const judul = masterJudulInput.value.trim();
             if (!judul) { showNotification('Judul produk tidak boleh kosong.', 'error'); return; }
+
             const selectedFeatures = fiturCheckboxes.filter(cb => cb.checked).map(cb => cb.value);
+            
             const imageName = `master-${Date.now()}`;
             const imageUrl = await handleImageUpload(masterGambarInput, imageName);
+
             const masterPayload = {
                 title: judul,
                 condition: masterKondisiSelect.value,
@@ -1297,7 +1257,9 @@ ${variantList}
                 description: masterKeteranganInput.value.trim(),
                 main_image_url: imageUrl || productMasters[judul]?.gambar
             };
+
             const { error } = await supabase.from('product_masters').upsert(masterPayload, { onConflict: 'title' });
+            
             if (error) {
                 showNotification(`Gagal simpan master: ${error.message}`, 'error');
             } else {
@@ -1308,6 +1270,34 @@ ${variantList}
                 populateMasterForm('');
             }
         });
+
+        function generateBatchTag() {
+            const month = batchMonthPicker.value;
+            if (!month) {
+                batchTagInput.value = '';
+                return;
+            }
+            const date = new Date(month + '-01');
+            const monthName = date.toLocaleString('id-ID', { month: 'short' }).toUpperCase();
+            const year = date.getFullYear().toString().slice(-2);
+            batchTagInput.value = `${monthName}${year}-`;
+        }
+
+        function generateMasterReportModalContent() {
+            let html = '';
+            for (const judul in productMasters) {
+                const master = productMasters[judul];
+                html += `
+                    <div>
+                        <h4>${judul}</h4>
+                        <p>Kondisi: ${master.kondisi}</p>
+                        <p>Rilis: ${master.rilis || '-'}</p>
+                        <hr>
+                    </div>
+                `;
+            }
+            masterReportModalList.innerHTML = html;
+        }
 
         // --- NEW CODE FOR VARIANT INPUTS ---
         function generateVariantInputs() {
@@ -1417,6 +1407,9 @@ ${variantList}
             populateMasterForm(masterJudulInput.value);
         });
         
+        judulPilihanInput.addEventListener('input', () => {
+            generateVariantInputs();
+        });
         totalVariantInput.addEventListener('input', generateVariantInputs);
         batchMonthPicker.addEventListener('input', generateBatchTag);
         
@@ -1437,7 +1430,7 @@ ${variantList}
             document.execCommand('copy');
             showNotification('Deskripsi berhasil disalin!', 'success');
         });
-        
+
         // Event listeners for Modals and Popups
         document.addEventListener('click', (e) => {
             // Image popup
@@ -1447,6 +1440,20 @@ ${variantList}
             }
             if (e.target.id === 'image-popup-close') {
                 toggleModal('image-popup', false);
+            }
+            if (e.target.id === 'master-products-card') {
+                generateMasterReportModalContent();
+                toggleModal('master-report-modal', true);
+            }
+            if (e.target.id === 'master-report-modal-close') {
+                toggleModal('master-report-modal', false);
+            }
+            if (e.target.id === 'sold-items-card') {
+                // TODO: Implement sold items modal logic
+                openModal('sold-items-modal');
+            }
+            if (e.target.id === 'sold-items-modal-close') {
+                closeModal('sold-items-modal');
             }
             // Group collapse
             if (e.target.classList.contains('group-header')) {
@@ -1462,15 +1469,6 @@ ${variantList}
             if (e.target.id === 'select-all-filtered') {
                 const isChecked = e.target.checked;
                 document.querySelectorAll('.variant-checkbox').forEach(cb => cb.checked = isChecked);
-            }
-            // Open modals
-            if (e.target.id === 'master-products-card') {
-                // Tampilkan popup master report
-                openModal('master-report-modal');
-            }
-            if (e.target.id === 'sold-items-card') {
-                // Tampilkan popup sold items
-                openModal('sold-items-modal');
             }
         });
 
