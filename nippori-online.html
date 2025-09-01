@@ -676,418 +676,422 @@
         const ACCESS_CODE = 'shopee-nippori'; // Ganti dengan kode yang Anda inginkan
         const SUPABASE_URL = 'https://mgpboaiusadsvbdenrid.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ncGJvYWl1c2Fkc3ZiZGVucmlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY2OTU1OTgsImV4cCI6MjA3MjI3MTU5OH0.tcCbwbVrWGnKH-Fo8IJkOLg2sweM8o2_4YhS5RmVLQE';
-        const { createClient } = supabase;
-        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // --- State Variables ---
-        let products = [];
-        let productMasters = {};
 
-        // --- Element Selectors ---
-        const loginSection = document.getElementById('login-section');
-        const mainAppContainer = document.getElementById('main-app');
-        const accessForm = document.getElementById('access-form');
-        const accessCodeInput = document.getElementById('access-code');
-        const accessErrorEl = document.getElementById('access-error');
-        const logoutBtn = document.getElementById('logout-btn');
-        const navLinksList = document.getElementById('nav-links-list');
-        const navLinks = document.querySelectorAll('.nav-link');
-        const sections = document.querySelectorAll('.content-section');
-        const totalMasterProductsEl = document.getElementById('total-master-products');
-        const totalUniqueVariantsEl = document.getElementById('total-unique-variants');
-        const totalStockItemsEl = document.getElementById('total-stock-items');
-        const masterJudulInput = document.getElementById('master-judul');
-        const masterJudulSuggestions = document.getElementById('master-judul-suggestions');
-        const masterGambarInput = document.getElementById('master-gambar');
-        const masterGambarPreview = document.getElementById('master-gambar-preview');
-        const masterKondisiSelect = document.getElementById('master-kondisi');
-        const masterRilisInput = document.getElementById('master-rilis');
-        const masterAsalInput = document.getElementById('master-asal');
-        const masterBrandInput = document.getElementById('master-brand');
-        const brandSuggestions = document.getElementById('brand-suggestions');
-        const fiturCheckboxes = Array.from(document.querySelectorAll('[id^="fitur-"]'));
-        const masterKeteranganInput = document.getElementById('master-keterangan');
-        const saveMasterBtn = document.getElementById('save-master-btn');
-        const judulPilihanSuggestions = document.getElementById('judul-pilihan-suggestions');
-        const descJudulPilihanSuggestions = document.getElementById('desc-judul-pilihan-suggestions');
-        const batchSuggestions = document.getElementById('batch-suggestions');
-        const searchInput = document.getElementById('search-input');
-        const batchFilter = document.getElementById('batch-filter');
-        const sortFilter = document.getElementById('sort-filter');
-        const productCounts = document.getElementById('product-counts');
-        const productListContainer = document.getElementById('product-list-container');
-        const lowStockListEl = document.getElementById('low-stock-list');
+// Perbaikan di sini: Akses createClient langsung dari window.supabase
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // --- Notification System ---
-        const notificationContainer = document.createElement('div');
-        notificationContainer.id = 'notification-container';
-        document.body.appendChild(notificationContainer);
+    // --- State Variables ---
+    let products = [];
+    let productMasters = {};
 
-        function showNotification(message, type = 'success') {
-            const notif = document.createElement('div');
-            notif.className = `notification ${type}`;
-            notif.textContent = message;
-            notificationContainer.appendChild(notif);
-            setTimeout(() => { notif.classList.add('show'); }, 10);
-            setTimeout(() => {
-                notif.classList.remove('show');
-                notif.addEventListener('transitionend', () => notif.remove());
-            }, 3000);
-        }
+    // --- Element Selectors ---
+    const loginSection = document.getElementById('login-section');
+    const mainAppContainer = document.getElementById('main-app');
+    const accessForm = document.getElementById('access-form');
+    const accessCodeInput = document.getElementById('access-code');
+    const accessErrorEl = document.getElementById('access-error');
+    const logoutBtn = document.getElementById('logout-btn');
+    const navLinksList = document.getElementById('nav-links-list');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('.content-section');
+    const totalMasterProductsEl = document.getElementById('total-master-products');
+    const totalUniqueVariantsEl = document.getElementById('total-unique-variants');
+    const totalStockItemsEl = document.getElementById('total-stock-items');
+    const masterJudulInput = document.getElementById('master-judul');
+    const masterJudulSuggestions = document.getElementById('master-judul-suggestions');
+    const masterGambarInput = document.getElementById('master-gambar');
+    const masterGambarPreview = document.getElementById('master-gambar-preview');
+    const masterKondisiSelect = document.getElementById('master-kondisi');
+    const masterRilisInput = document.getElementById('master-rilis');
+    const masterAsalInput = document.getElementById('master-asal');
+    const masterBrandInput = document.getElementById('master-brand');
+    const brandSuggestions = document.getElementById('brand-suggestions');
+    const fiturCheckboxes = Array.from(document.querySelectorAll('[id^="fitur-"]'));
+    const masterKeteranganInput = document.getElementById('master-keterangan');
+    const saveMasterBtn = document.getElementById('save-master-btn');
+    const judulPilihanSuggestions = document.getElementById('judul-pilihan-suggestions');
+    const descJudulPilihanSuggestions = document.getElementById('desc-judul-pilihan-suggestions');
+    const batchSuggestions = document.getElementById('batch-suggestions');
+    const searchInput = document.getElementById('search-input');
+    const batchFilter = document.getElementById('batch-filter');
+    const sortFilter = document.getElementById('sort-filter');
+    const productCounts = document.getElementById('product-counts');
+    const productListContainer = document.getElementById('product-list-container');
+    const lowStockListEl = document.getElementById('low-stock-list');
 
-        // --- Core Functions: Access Logic ---
-        function handleAccess(event) {
-            event.preventDefault();
-            const code = accessCodeInput.value;
-            if (code === ACCESS_CODE) {
-                accessErrorEl.textContent = '';
-                sessionStorage.setItem('authenticated', 'true');
-                showMainApp();
-            } else {
-                accessErrorEl.textContent = 'Kode akses salah.';
-                accessCodeInput.value = '';
-            }
-        }
+    // --- Notification System ---
+    const notificationContainer = document.createElement('div');
+    notificationContainer.id = 'notification-container';
+    document.body.appendChild(notificationContainer);
 
-        function handleLogout() {
-            sessionStorage.removeItem('authenticated');
-            location.reload();
-        }
-        
-        async function showMainApp() {
-            loginSection.style.display = 'none';
-            mainAppContainer.classList.add('visible');
-            await loadAllDataFromSupabase();
-            filterAndRenderAll();
-        }
+    function showNotification(message, type = 'success') {
+        const notif = document.createElement('div');
+        notif.className = `notification ${type}`;
+        notif.textContent = message;
+        notificationContainer.appendChild(notif);
+        setTimeout(() => { notif.classList.add('show'); }, 10);
+        setTimeout(() => {
+            notif.classList.remove('show');
+            notif.addEventListener('transitionend', () => notif.remove());
+        }, 3000);
+    }
 
-        // --- Core Functions: Data Loading ---
-        async function loadAllDataFromSupabase() {
-            showNotification('Memuat data dari database...', 'info');
-
-            const { data: variantData, error: variantError } = await supabase
-                .from('product_variants')
-                .select(`
-                    *,
-                    product_masters (
-                        title,
-                        main_image_url,
-                        condition,
-                        release_month,
-                        origin,
-                        brand,
-                        features,
-                        description
-                    )
-                `);
-
-            if (variantError) {
-                console.error('Gagal mengambil varian:', variantError);
-                products = [];
-            } else {
-                 products = variantData.map(v => ({
-                    uuid: v.id,
-                    master_id: v.master_id,
-                    judul: v.product_masters.title,
-                    variant: v.variant_name,
-                    stok: v.stock,
-                    batchTag: v.batch_tag,
-                    gambar: v.variant_image_url,
-                    kode: v.product_code,
-                    lokasi: v.location,
-                    batasMinimum: v.min_stock_limit,
-                    hargaNormal: v.normal_price,
-                    hargaDiskon: v.discount_price,
-                    lastModified: v.created_at,
-                 }));
-            }
-
-            const { data: masterData, error: masterError } = await supabase
-                .from('product_masters')
-                .select('*');
-
-            if (masterError) {
-                console.error('Gagal mengambil master:', masterError);
-                productMasters = {};
-            } else {
-                productMasters = masterData.reduce((acc, master) => {
-                    acc[master.title] = {
-                        id: master.id,
-                        gambar: master.main_image_url,
-                        kondisi: master.condition,
-                        rilis: master.release_month,
-                        asal: master.origin,
-                        brand: master.brand,
-                        fitur: master.features,
-                        keterangan: master.description,
-                        createdAt: master.created_at,
-                        lastModified: master.created_at
-                    };
-                    return acc;
-                }, {});
-            }
-            showNotification('Data berhasil dimuat!', 'success');
-        }
-
-        // --- Navigation Logic ---
-        function addNavLinksEventListeners() {
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', e => {
-                    e.preventDefault();
-                    const targetId = link.getAttribute('href').substring(1);
-                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                    link.classList.add('active');
-                    document.querySelectorAll('.content-section').forEach(s => s.classList.toggle('active', s.id === targetId));
-                    filterAndRenderAll();
-                });
-            });
-        }
-        
-        // --- Core Functions: UI & Logic ---
-        const populateMasterForm = (judul) => {
-            const masterData = productMasters[judul];
-            if (!masterData) {
-                masterGambarInput.src = '';
-                masterGambarPreview.style.display = 'none';
-                masterKondisiSelect.value = 'New';
-                masterRilisInput.value = '';
-                masterAsalInput.value = 'Jepang';
-                masterBrandInput.value = 'Bandai';
-                fiturCheckboxes.forEach(cb => cb.checked = true);
-                masterKeteranganInput.value = '';
-                return;
-            }
-            masterGambarPreview.src = masterData.gambar || '';
-            masterGambarPreview.style.display = masterData.gambar ? 'block' : 'none';
-            masterKondisiSelect.value = masterData.kondisi || 'New';
-            masterRilisInput.value = masterData.rilis || '';
-            masterAsalInput.value = masterData.asal || '';
-            masterBrandInput.value = masterData.brand || '';
-            masterKeteranganInput.value = masterData.keterangan || '';
-            fiturCheckboxes.forEach(cb => {
-                cb.checked = (masterData.fitur || []).includes(cb.value);
-            });
-        };
-        
-        const updateAllSuggestions = () => {
-            const titles = Object.keys(productMasters);
-            const titleOptions = titles.map(t => `<option value="${t}"></option>`).join('');
-            masterJudulSuggestions.innerHTML = titleOptions;
-            judulPilihanSuggestions.innerHTML = titleOptions;
-            descJudulPilihanSuggestions.innerHTML = titleOptions;
-            
-            const uniqueBrands = [...new Set(Object.values(productMasters).map(m => m.brand).filter(Boolean))];
-            brandSuggestions.innerHTML = uniqueBrands.map(b => `<option value="${b}"></option>`).join('');
-
-            const uniqueBatches = [...new Set(products.map(p => p.batchTag).filter(Boolean))];
-            batchSuggestions.innerHTML = uniqueBatches.map(b => `<option value="${b}"></option>`).join('');
-        };
-        
-        const updateCounts = () => {
-            const totalVariants = products.length;
-            const displayedVariants = productListContainer.querySelectorAll('.variant-item').length;
-            const selectedVariants = productListContainer.querySelectorAll('.variant-checkbox:checked').length;
-            productCounts.innerHTML = `Total Varian: <strong>${totalVariants}</strong> | Ditampilkan: <strong>${displayedVariants}</strong> | Dipilih: <strong>${selectedVariants}</strong>`;
-        };
-        
-        const getFilteredAndSortedProducts = () => {
-            let productsToRender = [...products];
-            const searchTerm = searchInput.value.toLowerCase();
-            const selectedBatch = batchFilter.value;
-            const sortOrder = sortFilter.value;
-
-            productsToRender.sort((a, b) => {
-                const dateA = new Date(a.lastModified).getTime();
-                const dateB = new Date(b.lastModified).getTime();
-                return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
-            });
-
-            if (selectedBatch) {
-                productsToRender = productsToRender.filter(p => p.batchTag === selectedBatch);
-            }
-
-            if (searchTerm) {
-                productsToRender = productsToRender.filter(p => 
-                    (p.judul.toLowerCase().includes(searchTerm)) ||
-                    (p.variant.toLowerCase().includes(searchTerm)) ||
-                    (p.kode && p.kode.toLowerCase().includes(searchTerm)) ||
-                    (p.batchTag && p.batchTag.toLowerCase().includes(searchTerm))
-                );
-            }
-            return productsToRender;
-        };
-        
-        const renderDashboard = () => {
-            const lowStockProducts = products.filter(p => p.stok <= p.batasMinimum);
-            lowStockListEl.innerHTML = lowStockProducts.map(p => `<li>${p.judul} - ${p.variant} (Stok: ${p.stok})</li>`).join('') || `<li>Tidak ada produk yang stoknya menipis.</li>`;
-
-            totalMasterProductsEl.textContent = Object.keys(productMasters).length;
-            totalUniqueVariantsEl.textContent = products.length;
-            totalStockItemsEl.textContent = products.reduce((sum, p) => sum + (p.stok || 0), 0);
-            totalItemsSoldEl.textContent = 'N/A';
-            totalRevenueEl.textContent = 'Rp N/A';
-        };
-        
-        const renderProductList = () => {
-            const filteredProducts = getFilteredAndSortedProducts();
-            const groupedByBatch = filteredProducts.reduce((acc, p) => {
-                const batchKey = p.batchTag || 'Tanpa Batch';
-                if (!acc[batchKey]) acc[batchKey] = {};
-                if (!acc[batchKey][p.judul]) acc[batchKey][p.judul] = [];
-                acc[batchKey][p.judul].push(p);
-                return acc;
-            }, {});
-            
-            productListContainer.innerHTML = '';
-
-            Object.keys(groupedByBatch).forEach(batch => {
-                const batchContainer = document.createElement('div');
-                batchContainer.innerHTML = `<h2 class="batch-header">Batch: ${batch}</h2>`;
-                
-                const productsInBatch = groupedByBatch[batch];
-                for (const judul in productsInBatch) {
-                    const master = productMasters[judul] || {};
-                    const variants = productsInBatch[judul];
-                    const groupCard = document.createElement('div');
-                    groupCard.className = 'product-group-card';
-                    
-                    let variantsHTML = '';
-                    variants.forEach(v => {
-                        const lowStockClass = (v.stok <= (v.batasMinimum || 0)) ? 'low-stock' : '';
-                        let priceHTML = `<div class="price-display"><strong>${new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(v.hargaNormal || 0)}</strong></div>`;
-                        if (v.hargaDiskon > 0 && v.hargaDiskon < v.hargaNormal) {
-                            const diskon = Math.round(((v.hargaNormal - v.hargaDiskon) / v.hargaNormal) * 100);
-                            priceHTML = `<div class="price-display"><span class="price-diskon">${new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(v.hargaDiskon)}</span><span class="price-normal">${new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(v.hargaNormal)}</span><span class="diskon-badge">${diskon}%</span></div>`;
-                        }
-
-                        variantsHTML += `
-                            <li class="variant-item ${lowStockClass}" data-uuid="${v.uuid}">
-                                <img src="${v.gambar || 'https://placehold.co/40x40/e0e0e0/555?text=...'}" class="variant-image image-preview-trigger" data-img-src="${v.gambar || ''}">
-                                <div class="variant-details">
-                                    <p><strong>${v.variant}</strong></p>
-                                    ${priceHTML}
-                                    <p>Stok: ${v.stok} | Lokasi: ${v.lokasi || '-'}</p>
-                                    <p style="font-size: 0.8em; color: #6c757d;">Kode: ${v.kode || 'N/A'}</p>
-                                </div>
-                                <div class="variant-actions">
-                                    <button class="action-btn history-btn">Riwayat</button>
-                                    <button class="action-btn edit-btn">Edit</button>
-                                    <button class="action-btn delete-btn">Hapus</button>
-                                    <input type="checkbox" class="variant-checkbox">
-                                </div>
-                            </li>
-                        `;
-                    });
-
-                    groupCard.innerHTML = `
-                        <div class="group-header">
-                            <img src="${master.gambar || 'https://placehold.co/60x60/e0e0e0/555?text=NoImg'}" class="group-image image-preview-trigger" data-img-src="${master.gambar || ''}">
-                            <div class="group-title">${judul}</div>
-                            <span class="group-toggle-icon">&#9654;</span>
-                            <button class="action-btn quick-add-btn" data-judul="${judul}">+</button>
-                            <button class="action-btn delete-btn group-delete-btn" data-judul="${judul}">Hapus Grup</button>
-                            <input type="checkbox" class="group-checkbox">
-                        </div>
-                        <ul class="variant-list">${variantsHTML}</ul>
-                    `;
-                    batchContainer.appendChild(groupCard);
-                }
-                productListContainer.appendChild(batchContainer);
-            });
-            updateCounts();
-        };
-
-        const handleImageUpload = async (fileInput, fileName) => {
-            const file = fileInput.files[0];
-            if (!file) return null;
-
-            if (file.size > 2 * 1024 * 1024) {
-                showNotification('Ukuran gambar terlalu besar (maks 2MB).', 'error');
-                return null;
-            }
-            
-            const { error } = await supabase.storage
-                .from('product-images')
-                .upload(fileName, file, {
-                    cacheControl: '3600',
-                    upsert: true, 
-                });
-
-            if (error) {
-                showNotification(`Gagal unggah gambar: ${error.message}`, 'error');
-                return null;
-            }
-            
-            const { data: { publicUrl } } = supabase.storage.from('product-images').getPublicUrl(fileName);
-            return publicUrl;
-        };
-
-        saveMasterBtn.addEventListener('click', async () => {
-            const judul = masterJudulInput.value.trim();
-            if (!judul) { showNotification('Judul produk tidak boleh kosong.', 'error'); return; }
-
-            const selectedFeatures = fiturCheckboxes.filter(cb => cb.checked).map(cb => cb.value);
-            
-            const imageName = `master-${Date.now()}`;
-            const imageUrl = await handleImageUpload(masterGambarInput, imageName);
-
-            const masterPayload = {
-                title: judul,
-                condition: masterKondisiSelect.value,
-                release_month: masterRilisInput.value || null,
-                origin: masterAsalInput.value,
-                brand: masterBrandInput.value,
-                features: selectedFeatures,
-                description: masterKeteranganInput.value.trim(),
-                main_image_url: imageUrl || productMasters[judul]?.gambar
-            };
-
-            const { error } = await supabase.from('product_masters').upsert(masterPayload, { onConflict: 'title' });
-            
-            if (error) {
-                showNotification(`Gagal simpan master: ${error.message}`, 'error');
-            } else {
-                showNotification(`Master produk "${judul}" berhasil disimpan!`);
-                await loadAllDataFromSupabase();
-                filterAndRenderAll();
-                masterJudulInput.value = '';
-                populateMasterForm('');
-            }
-        });
-
-        masterJudulInput.addEventListener('input', () => {
-            populateMasterForm(masterJudulInput.value);
-        });
-
-        window.filterAndRenderAll = () => {
-            const activeSectionId = document.querySelector('.content-section.active')?.id;
-            if (!activeSectionId) return;
-
-            if (activeSectionId === 'dashboard') {
-                renderDashboard();
-            } else if (activeSectionId === 'data-list') {
-                renderProductList();
-            }
-            updateAllSuggestions();
-        };
-
-        // --- Initial Setup & Event Listeners ---
-        accessForm.addEventListener('submit', handleAccess);
-        logoutBtn.addEventListener('click', handleLogout);
-        addNavLinksEventListeners();
-        
-        // Cek apakah pengguna sudah login sebelumnya
-        if (sessionStorage.getItem('authenticated') === 'true') {
+    // --- Core Functions: Access Logic ---
+    function handleAccess(event) {
+        event.preventDefault();
+        const code = accessCodeInput.value;
+        if (code === ACCESS_CODE) {
+            accessErrorEl.textContent = '';
+            sessionStorage.setItem('authenticated', 'true');
             showMainApp();
         } else {
-            loginSection.style.display = 'flex';
+            accessErrorEl.textContent = 'Kode akses salah.';
+            accessCodeInput.value = '';
+        }
+    }
+
+    function handleLogout() {
+        sessionStorage.removeItem('authenticated');
+        location.reload();
+    }
+    
+    async function showMainApp() {
+        loginSection.style.display = 'none';
+        mainAppContainer.classList.add('visible');
+        await loadAllDataFromSupabase();
+        filterAndRenderAll();
+    }
+
+    // --- Core Functions: Data Loading ---
+    async function loadAllDataFromSupabase() {
+        showNotification('Memuat data dari database...', 'info');
+
+        const { data: variantData, error: variantError } = await supabase
+            .from('product_variants')
+            .select(`
+                *,
+                product_masters (
+                    title,
+                    main_image_url,
+                    condition,
+                    release_month,
+                    origin,
+                    brand,
+                    features,
+                    description
+                )
+            `);
+
+        if (variantError) {
+            console.error('Gagal mengambil varian:', variantError);
+            products = [];
+        } else {
+             products = variantData.map(v => ({
+                uuid: v.id,
+                master_id: v.master_id,
+                judul: v.product_masters.title,
+                variant: v.variant_name,
+                stok: v.stock,
+                batchTag: v.batch_tag,
+                gambar: v.variant_image_url,
+                kode: v.product_code,
+                lokasi: v.location,
+                batasMinimum: v.min_stock_limit,
+                hargaNormal: v.normal_price,
+                hargaDiskon: v.discount_price,
+                lastModified: v.created_at,
+             }));
         }
 
-        // Redirect to dashboard on initial load
-        document.querySelector('.nav-links a[href="#dashboard"]').click();
+        const { data: masterData, error: masterError } = await supabase
+            .from('product_masters')
+            .select('*');
+
+        if (masterError) {
+            console.error('Gagal mengambil master:', masterError);
+            productMasters = {};
+        } else {
+            productMasters = masterData.reduce((acc, master) => {
+                acc[master.title] = {
+                    id: master.id,
+                    gambar: master.main_image_url,
+                    kondisi: master.condition,
+                    rilis: master.release_month,
+                    asal: master.origin,
+                    brand: master.brand,
+                    fitur: master.features,
+                    keterangan: master.description,
+                    createdAt: master.created_at,
+                    lastModified: master.created_at
+                };
+                return acc;
+            }, {});
+        }
+        showNotification('Data berhasil dimuat!', 'success');
+    }
+
+    // --- Navigation Logic ---
+    function addNavLinksEventListeners() {
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                document.querySelectorAll('.content-section').forEach(s => s.classList.toggle('active', s.id === targetId));
+                filterAndRenderAll();
+            });
+        });
+    }
+    
+    // --- Core Functions: UI & Logic ---
+    const populateMasterForm = (judul) => {
+        const masterData = productMasters[judul];
+        if (!masterData) {
+            masterGambarInput.src = '';
+            masterGambarPreview.style.display = 'none';
+            masterKondisiSelect.value = 'New';
+            masterRilisInput.value = '';
+            masterAsalInput.value = 'Jepang';
+            masterBrandInput.value = 'Bandai';
+            fiturCheckboxes.forEach(cb => cb.checked = true);
+            masterKeteranganInput.value = '';
+            return;
+        }
+        masterGambarPreview.src = masterData.gambar || '';
+        masterGambarPreview.style.display = masterData.gambar ? 'block' : 'none';
+        masterKondisiSelect.value = masterData.kondisi || 'New';
+        masterRilisInput.value = masterData.rilis || '';
+        masterAsalInput.value = masterData.asal || '';
+        masterBrandInput.value = masterData.brand || '';
+        masterKeteranganInput.value = masterData.keterangan || '';
+        fiturCheckboxes.forEach(cb => {
+            cb.checked = (masterData.fitur || []).includes(cb.value);
+        });
+    };
+    
+    const updateAllSuggestions = () => {
+        const titles = Object.keys(productMasters);
+        const titleOptions = titles.map(t => `<option value="${t}"></option>`).join('');
+        masterJudulSuggestions.innerHTML = titleOptions;
+        judulPilihanSuggestions.innerHTML = titleOptions;
+        descJudulPilihanSuggestions.innerHTML = titleOptions;
+        
+        const uniqueBrands = [...new Set(Object.values(productMasters).map(m => m.brand).filter(Boolean))];
+        brandSuggestions.innerHTML = uniqueBrands.map(b => `<option value="${b}"></option>`).join('');
+
+        const uniqueBatches = [...new Set(products.map(p => p.batchTag).filter(Boolean))];
+        batchSuggestions.innerHTML = uniqueBatches.map(b => `<option value="${b}"></option>`).join('');
+    };
+    
+    const updateCounts = () => {
+        const totalVariants = products.length;
+        const displayedVariants = productListContainer.querySelectorAll('.variant-item').length;
+        const selectedVariants = productListContainer.querySelectorAll('.variant-checkbox:checked').length;
+        productCounts.innerHTML = `Total Varian: <strong>${totalVariants}</strong> | Ditampilkan: <strong>${displayedVariants}</strong> | Dipilih: <strong>${selectedVariants}</strong>`;
+    };
+    
+    const getFilteredAndSortedProducts = () => {
+        let productsToRender = [...products];
+        const searchTerm = searchInput.value.toLowerCase();
+        const selectedBatch = batchFilter.value;
+        const sortOrder = sortFilter.value;
+
+        productsToRender.sort((a, b) => {
+            const dateA = new Date(a.lastModified).getTime();
+            const dateB = new Date(b.lastModified).getTime();
+            return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+        });
+
+        if (selectedBatch) {
+            productsToRender = productsToRender.filter(p => p.batchTag === selectedBatch);
+        }
+
+        if (searchTerm) {
+            productsToRender = productsToRender.filter(p => 
+                (p.judul.toLowerCase().includes(searchTerm)) ||
+                (p.variant.toLowerCase().includes(searchTerm)) ||
+                (p.kode && p.kode.toLowerCase().includes(searchTerm)) ||
+                (p.batchTag && p.batchTag.toLowerCase().includes(searchTerm))
+            );
+        }
+        return productsToRender;
+    };
+    
+    const renderDashboard = () => {
+        const lowStockProducts = products.filter(p => p.stok <= p.batasMinimum);
+        lowStockListEl.innerHTML = lowStockProducts.map(p => `<li>${p.judul} - ${p.variant} (Stok: ${p.stok})</li>`).join('') || `<li>Tidak ada produk yang stoknya menipis.</li>`;
+
+        totalMasterProductsEl.textContent = Object.keys(productMasters).length;
+        totalUniqueVariantsEl.textContent = products.length;
+        totalStockItemsEl.textContent = products.reduce((sum, p) => sum + (p.stok || 0), 0);
+        totalItemsSoldEl.textContent = 'N/A';
+        totalRevenueEl.textContent = 'Rp N/A';
+    };
+    
+    const renderProductList = () => {
+        const filteredProducts = getFilteredAndSortedProducts();
+        const groupedByBatch = filteredProducts.reduce((acc, p) => {
+            const batchKey = p.batchTag || 'Tanpa Batch';
+            if (!acc[batchKey]) acc[batchKey] = {};
+            if (!acc[batchKey][p.judul]) acc[batchKey][p.judul] = [];
+            acc[batchKey][p.judul].push(p);
+            return acc;
+        }, {});
+        
+        productListContainer.innerHTML = '';
+
+        Object.keys(groupedByBatch).forEach(batch => {
+            const batchContainer = document.createElement('div');
+            batchContainer.innerHTML = `<h2 class="batch-header">Batch: ${batch}</h2>`;
+            
+            const productsInBatch = groupedByBatch[batch];
+            for (const judul in productsInBatch) {
+                const master = productMasters[judul] || {};
+                const variants = productsInBatch[judul];
+                const groupCard = document.createElement('div');
+                groupCard.className = 'product-group-card';
+                
+                let variantsHTML = '';
+                variants.forEach(v => {
+                    const lowStockClass = (v.stok <= (v.batasMinimum || 0)) ? 'low-stock' : '';
+                    let priceHTML = `<div class="price-display"><strong>${new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(v.hargaNormal || 0)}</strong></div>`;
+                    if (v.hargaDiskon > 0 && v.hargaDiskon < v.hargaNormal) {
+                        const diskon = Math.round(((v.hargaNormal - v.hargaDiskon) / v.hargaNormal) * 100);
+                        priceHTML = `<div class="price-display"><span class="price-diskon">${new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(v.hargaDiskon)}</span><span class="price-normal">${new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(v.hargaNormal)}</span><span class="diskon-badge">${diskon}%</span></div>`;
+                    }
+
+                    variantsHTML += `
+                        <li class="variant-item ${lowStockClass}" data-uuid="${v.uuid}">
+                            <img src="${v.gambar || 'https://placehold.co/40x40/e0e0e0/555?text=...'}" class="variant-image image-preview-trigger" data-img-src="${v.gambar || ''}">
+                            <div class="variant-details">
+                                <p><strong>${v.variant}</strong></p>
+                                ${priceHTML}
+                                <p>Stok: ${v.stok} | Lokasi: ${v.lokasi || '-'}</p>
+                                <p style="font-size: 0.8em; color: #6c757d;">Kode: ${v.kode || 'N/A'}</p>
+                            </div>
+                            <div class="variant-actions">
+                                <button class="action-btn history-btn">Riwayat</button>
+                                <button class="action-btn edit-btn">Edit</button>
+                                <button class="action-btn delete-btn">Hapus</button>
+                                <input type="checkbox" class="variant-checkbox">
+                            </div>
+                        </li>
+                    `;
+                });
+
+                groupCard.innerHTML = `
+                    <div class="group-header">
+                        <img src="${master.gambar || 'https://placehold.co/60x60/e0e0e0/555?text=NoImg'}" class="group-image image-preview-trigger" data-img-src="${master.gambar || ''}">
+                        <div class="group-title">${judul}</div>
+                        <span class="group-toggle-icon">&#9654;</span>
+                        <button class="action-btn quick-add-btn" data-judul="${judul}">+</button>
+                        <button class="action-btn delete-btn group-delete-btn" data-judul="${judul}">Hapus Grup</button>
+                        <input type="checkbox" class="group-checkbox">
+                    </div>
+                    <ul class="variant-list">${variantsHTML}</ul>
+                `;
+                batchContainer.appendChild(groupCard);
+            }
+            productListContainer.appendChild(batchContainer);
+        });
+        updateCounts();
+    };
+
+    const handleImageUpload = async (fileInput, fileName) => {
+        const file = fileInput.files[0];
+        if (!file) return null;
+
+        if (file.size > 2 * 1024 * 1024) {
+            showNotification('Ukuran gambar terlalu besar (maks 2MB).', 'error');
+            return null;
+        }
+        
+        const { error } = await supabase.storage
+            .from('product-images')
+            .upload(fileName, file, {
+                cacheControl: '3600',
+                upsert: true, 
+            });
+
+        if (error) {
+            showNotification(`Gagal unggah gambar: ${error.message}`, 'error');
+            return null;
+        }
+        
+        const { data: { publicUrl } } = supabase.storage.from('product-images').getPublicUrl(fileName);
+        return publicUrl;
+    };
+
+    saveMasterBtn.addEventListener('click', async () => {
+        const judul = masterJudulInput.value.trim();
+        if (!judul) { showNotification('Judul produk tidak boleh kosong.', 'error'); return; }
+
+        const selectedFeatures = fiturCheckboxes.filter(cb => cb.checked).map(cb => cb.value);
+        
+        const imageName = `master-${Date.now()}`;
+        const imageUrl = await handleImageUpload(masterGambarInput, imageName);
+
+        const masterPayload = {
+            title: judul,
+            condition: masterKondisiSelect.value,
+            release_month: masterRilisInput.value || null,
+            origin: masterAsalInput.value,
+            brand: masterBrandInput.value,
+            features: selectedFeatures,
+            description: masterKeteranganInput.value.trim(),
+            main_image_url: imageUrl || productMasters[judul]?.gambar
+        };
+
+        const { error } = await supabase.from('product_masters').upsert(masterPayload, { onConflict: 'title' });
+        
+        if (error) {
+            showNotification(`Gagal simpan master: ${error.message}`, 'error');
+        } else {
+            showNotification(`Master produk "${judul}" berhasil disimpan!`);
+            await loadAllDataFromSupabase();
+            filterAndRenderAll();
+            masterJudulInput.value = '';
+            populateMasterForm('');
+        }
     });
+
+    masterJudulInput.addEventListener('input', () => {
+        populateMasterForm(masterJudulInput.value);
+    });
+
+    window.filterAndRenderAll = () => {
+        const activeSectionId = document.querySelector('.content-section.active')?.id;
+        if (!activeSectionId) return;
+
+        if (activeSectionId === 'dashboard') {
+            renderDashboard();
+        } else if (activeSectionId === 'data-list') {
+            renderProductList();
+        }
+        updateAllSuggestions();
+    };
+
+    // --- Initial Setup & Event Listeners ---
+    accessForm.addEventListener('submit', handleAccess);
+    logoutBtn.addEventListener('click', handleLogout);
+    addNavLinksEventListeners();
+    
+    // Cek apakah pengguna sudah login sebelumnya
+    if (sessionStorage.getItem('authenticated') === 'true') {
+        showMainApp();
+    } else {
+        loginSection.style.display = 'flex';
+    }
+
+    // Redirect to dashboard on initial load
+    document.querySelector('.nav-links a[href="#dashboard"]').click();
+    
+});
     </script>
 </body>
 
 </html>
+
 
