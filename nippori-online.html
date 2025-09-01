@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nippori Sistem</title>
-    <link rel="icon" href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wgARCAAoACgDAREAAhEBAxEB/8QAHAABAAICAwEAAAAAAAAAAAAAAAYHBAUBAgMI/8QAGQEBAQEBAQEAAAAAAAAAAAAAAAECAwQG/9oADAMBAAIQAxAAAAP3wAAAAA4c2s3G9Z58S2lT1vEa4SklLqV7dE4+lQAAAAAP/EACQQAQACAQIGAgMAAAAAAAAAAAUDBAYBAgcIERITFCEiMTJR/9oACAEBAAEFAv68FvHkPqL5e22T2K+Poe36S9s6Pj+hL3fR2z+m/pG7RkPqL+Y7rG/c55e67R2K+Xuv0v6S9u6Pj+h/3fR2wum/pG794//xAAUEQEAAAAAAAAAAAAAAAAAAAAg/9oACAEDAQE/AR//xAAUEQEAAAAAAAAAAAAAAAAAAAAg/9oACAECAQE/AR//xAAsEAABAgIABAQGAwAAAAAAAAABAgMEAAUREhMhFCAxUVIQIiMyQUNQYXHB/9oACAEBAAY/Av2K7V94w3g4xU4gY6g/QxhvAxeoP0cYbwMvUF+jjDeBle/X6OMN4GV78v0cYaX2q7V9oQ3gYzUF+jjDeBjNQv0cYaXv8v0cYaXvy/RxhpfbL9HGGl9qufeEN4GJ1Bfo4w3gYnUv6OMNL7JfY4w0vtl9jjDS92X6OMNL3Zfo4w0vtl9jjDS+1Xav/2Q==" type="image/jpeg">
+    <link rel="icon" href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wgARCAAoACgDAREAAhEBAxEB/8QAHAABAAICAwEAAAAAAAAAAAAAAAYHBAUBAgMI/8QAGQEBAQEBAQEAAAAAAAAAAAAAAAECAwQG/9oADAMAAxAAAAP3wAAAAA4c2s3G9Z58S2lT1vEa4SklLqV7dE4+lQAAAAAP/EACQQAQACAQIGAgMAAAAAAAAAAAUDBAYBAgcIERITFCEiMTJR/9oACAEBAAEFAv68FvHkPqL5e22T2K+Poe36S9s6Pj+hL3fR2z+m/pG7RkPqL+Y7rG/c55e67R2K+Xuv0v6S9u6Pj+h/3fR2wum/pG794//xAAUEQEAAAAAAAAAAAAAAAAAAAAg/9oACAEDAQE/AR//xAAUEQEAAAAAAAAAAAAAAAAAAAAg/9oACAECAQE/AR//xAAsEAABAgIABAQGAwAAAAAAAAABAgMEAAUREhMhFCAxUVIQIiMyQUNQYXHB/9oACAEBAAY/Av2K7V94w3g4xU4gY6g/QxhvAxeoP0cYbwMvUF+jjDeBle/X6OMN4GV78v0cYaX2q7V9oQ3gYzUF+jjDeBjNQv0cYaXv8v0cYaXvy/RxhpfbL9HGGl9qufeEN4GJ1Bfo4w3gYnUv6OMNL7JfY4w0vtl9jjDS92X6OMNL3Zfo4w0vtl9jjDS+1Xav/2Q==" type="image/jpeg">
     <link rel="manifest" href="manifest.json">
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -336,25 +336,21 @@
                 border-right: none;
                 border-bottom: 1px solid var(--border-color);
                 padding: 10px;
+                display: block; /* Hide navigation by default on mobile */
             }
             .nav-header {
                 text-align: left;
                 margin-bottom: 10px;
-            }
-            .nav-links {
                 display: flex;
-                flex-wrap: wrap;
                 justify-content: space-between;
-                flex-grow: 0;
+                align-items: center;
             }
-            .nav-links li {
-                width: 48%;
-                margin-bottom: 5px;
+            #nav-links-list {
+                display: none;
+                flex-direction: column;
             }
-            .nav-links a {
-                padding: 8px;
-                text-align: center;
-                justify-content: center;
+            #nav-links-list.open {
+                display: flex;
             }
             #logout-btn {
                 margin-top: 10px;
@@ -372,6 +368,14 @@
             .price-group, .footer-actions-wrapper, .actions-container {
                 flex-direction: column;
                 gap: 10px;
+            }
+            #mobile-nav-toggle {
+                display: block;
+                background: none;
+                border: none;
+                font-size: 24px;
+                color: var(--nippori-blue);
+                cursor: pointer;
             }
         }
         @media (max-width: 480px) {
@@ -391,6 +395,11 @@
             .group-image {
                 margin-right: 0;
                 margin-bottom: 10px;
+            }
+        }
+        @media (min-width: 769px) {
+            #mobile-nav-toggle {
+                display: none;
             }
         }
     </style>
@@ -415,7 +424,10 @@
 
     <div class="main-app-container" id="main-app">
         <nav class="main-nav">
-            <div class="nav-header">Nippori Sistem</div>
+            <div class="nav-header">
+                Nippori Sistem
+                <button id="mobile-nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+            </div>
             <ul class="nav-links" id="nav-links-list">
                 <li><a href="#dashboard" class="nav-link active">Dashboard</a></li>
                 <li><a href="#produk" class="nav-link">Produk</a></li>
@@ -762,9 +774,9 @@
     document.addEventListener('DOMContentLoaded', () => {
 
         // --- Konfigurasi ---
-        const ACCESS_CODE = 'nippori'; // Ganti dengan kode yang Anda inginkan
-        const SUPABASE_URL = 'https://ishymqozzxceldthraix.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlzaHltcW96enhjZWxkdGhyYWl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY2OTAwNzAsImV4cCI6MjA3MjI2NjA3MH0.djOPVre3P0XgFKRG9JL90K9Fqr9BG_2MuRL8vh-0NWA';
+        const ACCESS_CODE = 'nippori';
+        const SUPABASE_URL = 'https://mgpboaiusadsvbdenrid.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ncGJvYWl1c2Fkc3ZiZGVucmlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY2OTU1OTgsImV4cCI6MjA3MjI3MTU5OH0.tcCbwbVrWGnKH-Fo8IJkOLg2sweM8o2_4YhS5RmVLQE';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         // --- State Variables ---
@@ -781,6 +793,7 @@
         const navLinksList = document.getElementById('nav-links-list');
         const navLinks = document.querySelectorAll('.nav-link');
         const sections = document.querySelectorAll('.content-section');
+        const mobileNavToggle = document.getElementById('mobile-nav-toggle');
 
         // Variabel untuk Dashboard
         const totalMasterProductsEl = document.getElementById('total-master-products');
@@ -914,6 +927,14 @@
             }, 3000);
         }
 
+        // Universal modal handler
+        function toggleModal(modalId, show = true) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = show ? 'flex' : 'none';
+            }
+        }
+
         // --- Core Functions: Access Logic ---
         function handleAccess(event) {
             event.preventDefault();
@@ -1017,6 +1038,10 @@
                     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
                     link.classList.add('active');
                     document.querySelectorAll('.content-section').forEach(s => s.classList.toggle('active', s.id === targetId));
+                    // Close mobile nav on click
+                    if (window.innerWidth <= 768) {
+                        navLinksList.classList.remove('open');
+                    }
                     filterAndRenderAll();
                 });
             });
@@ -1357,6 +1382,13 @@
             document.querySelectorAll('.variant-stok').forEach(input => input.value = bulkStokInput.value);
         });
         submitVariantsBtn.addEventListener('click', submitVariants);
+
+        // Event listener for mobile navigation toggle
+        if (mobileNavToggle) {
+            mobileNavToggle.addEventListener('click', () => {
+                navLinksList.classList.toggle('open');
+            });
+        }
         
         // General function to re-render the view
         window.filterAndRenderAll = () => {
