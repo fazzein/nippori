@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nippori Sistem</title>
+    <link rel="icon" href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wgARCAAoACgDAREAAhEBAxEB/8QAHAABAAICAwEAAAAAAAAAAAAAAAYHBAUBAgMI/8QAGQEBAQEBAQEAAAAAAAAAAAAAAAECAwQG/9oADAMBAAIQAxAAAAD3wAAAAA4c2s3G9Z58S2lT1vEa4SklLqV7dE4+lQAAAAAP/EACQQAQACAQIGAgMAAAAAAAAAAAUDBAYBAgcIERITFCEiMTJR/9oACAEBAAEFAv68FvHkPqL5e22T2K+Poe36S9s6Pj+hL3fR2z+m/pG7RkPqL+Y7rG/c55e67R2K+Xuv0v6S9u6Pj+h/3fR2wum/pG794//xAAUEQEAAAAAAAAAAAAAAAAAAAAg/9oACAEDAQE/AR//xAAUEQEAAAAAAAAAAAAAAAAAAAAg/9oACAECAQE/AR//xAAsEAABAgIABAQGAwAAAAAAAAABAgMEAAUREhMhFCAxUVIQIiMyQUNQYXHB/9oACAEBAAY/Av2K7V94w3g4xU4gY6g/QxhvAxeoP0cYbwMvUF+jjDeBle/X6OMN4GV78v0cYaX2q7V9oQ3gYzUF+jjDeBjNQv0cYaXv8v0cYaXvy/RxhpfbL9HGGl9qufeEN4GJ1Bfo4w3gYnUv6OMNL7JfY4w0vtl9jjDS92X6OMNL3Zfo4w0vtl9jjDS+1Xav/2Q==" type="image/jpeg">
+    <link rel="manifest" href="manifest.json">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root {
+            --nippori-blue: #1E2A4D;
+            --nippori-red: #D9303B;
+            --nippori-gold: #F1B532;
+            --light-gray: #f8f9fa;
+            --dark-gray: #495057;
+            --border-color: #dee2e6;
+            --success: #28a745;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            margin: 0;
+        }
+        .main-app-container {
+            display: none; /* Hidden by default */
+            width: 100%;
+            height: 100vh;
+        }
+        .main-app-container.visible {
+            display: flex;
+        }
+
+        /* --- LOGIN PAGE STYLES --- */
+        #login-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100vh;
+            background-color: #fff;
+        }
+        .login-card {
+            background: var(--light-gray);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+        .login-logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+        .login-card h1 {
+            color: var(--nippori-blue);
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            border-bottom: none;
+        }
+        .login-card .form-group {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+        .login-card label {
+            font-weight: 600;
+        }
+        .login-card input {
+            padding: 14px;
+        }
+        .login-card button {
+            width: 100%;
+            margin-top: 10px;
+        }
+        #login-error, #signup-message {
+            color: var(--nippori-red);
+            margin-top: 15px;
+            font-size: 0.9em;
+            min-height: 1.2em;
+        }
+        #signup-message.success {
+            color: var(--success);
+        }
+        .auth-toggle {
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+        .auth-toggle-btn {
+            background: none;
+            border: none;
+            color: var(--nippori-blue);
+            font-weight: bold;
+            cursor: pointer;
+            padding: 0;
+        }
+
+
+        /* --- MAIN APP STYLES --- */
+        .main-nav {
+            width: 240px;
+            background-color: #ffffff;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            border-right: 1px solid var(--border-color);
+            padding: 20px;
+            box-sizing: border-box;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .nav-header {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--nippori-blue);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .nav-links { list-style: none; padding: 0; margin: 0; flex-grow: 1;}
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            text-decoration: none;
+            color: var(--dark-gray);
+            font-weight: 600;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            background-color: var(--nippori-blue);
+            color: white;
+        }
+        #logout-btn {
+            width: 100%;
+            background-color: var(--nippori-red);
+            color: white;
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+            max-width: calc(100% - 280px);
+            overflow-y: auto;
+        }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        .card {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+        }
+        h1, h2 {
+            color: var(--nippori-blue);
+            border-bottom: 2px solid var(--nippori-gold);
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        h2.batch-header {
+            border-bottom: 1px solid var(--border-color);
+            font-size: 1.2em;
+            margin-top: 25px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label { display: block; margin-bottom: 8px; font-weight: 600; }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 1em;
+        }
+        button {
+            padding: 14px;
+            background-color: var(--nippori-gold);
+            color: var(--nippori-blue);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 700;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(241, 181, 50, 0.3);
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* User Management Styles */
+        #user-management-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        #user-management-table th, #user-management-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        #user-management-table th {
+            background-color: var(--light-gray);
+        }
+        .action-btn { font-size: 12px; padding: 6px 10px; width: auto; }
+        .edit-btn { background-color: var(--nippori-blue); color: white; }
+        .delete-btn { background-color: var(--nippori-red); color: white; }
+
+        /* General App styles from previous version */
+        .product-list-card { display: flex; flex-direction: column; max-height: 85vh; }
+        #product-list-container { flex-grow: 1; overflow-y: auto; padding-right: 15px; }
+        .product-list-header { padding-bottom: 15px; border-bottom: 1px solid var(--border-color); }
+        .product-list-footer { flex-shrink: 0; padding-top: 15px; position: sticky; bottom: -30px; background-color: rgba(255, 255, 255, 0.9); backdrop-filter: blur(5px); margin: 0 -30px -30px -30px; padding: 15px 30px; border-top: 1px solid var(--border-color); }
+        .product-group-card { border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 15px; overflow: hidden; }
+        .group-header { display: flex; align-items: center; padding: 15px; background-color: #f8f9fa; cursor: pointer; }
+        .group-header .action-btn { margin-left: 15px; }
+        .group-image { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; margin-right: 15px; }
+        .group-title { flex-grow: 1; font-size: 1.2em; font-weight: 700; color: var(--nippori-blue); }
+        .variant-list { list-style: none; padding: 0; margin: 0; display: none; }
+        .product-group-card.expanded .variant-list { display: block; }
+        .group-toggle-icon { margin-left: 10px; transition: transform 0.3s; }
+        .product-group-card.expanded .group-toggle-icon { transform: rotate(90deg); }
+        .variant-item { display: flex; align-items: center; padding: 12px 15px; border-top: 1px solid #f1f3f5; }
+        .variant-item.low-stock { background-color: rgba(217, 48, 59, 0.05); border-left: 4px solid var(--nippori-red); }
+        .variant-image { width: 40px; height: 40px; object-fit: cover; border-radius: 6px; margin-right: 12px; cursor: pointer; }
+        .variant-details { flex-grow: 1; }
+        .variant-details p { margin: 0 0 4px 0; font-size: 14px; }
+        .variant-actions { display: flex; gap: 8px; margin-left: auto; align-items: center; }
+        .history-btn { background-color: #6c757d; color: white; }
+        .quick-add-btn { background-color: var(--success); color: white; padding: 5px 8px; font-size: 1.2em; border-radius: 50%; width: 32px; height: 32px; line-height: 1; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 2000; }
+        .modal-content img { max-width: 90vw; max-height: 90vh; }
+        .modal-close { position: absolute; top: 15px; right: 15px; width: 30px; height: 30px; border-radius: 50%; background: var(--nippori-red); color: white; border: none; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1; padding: 0; }
+        .modal-inner-content { background-color: white; padding: 30px; border-radius: 16px; width: 90%; max-width: 800px; position: relative; }
+        .variant-input-group { border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; margin-bottom: 15px; }
+        .filter-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
+        .footer-actions-wrapper { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+        .actions-container { display: flex; gap: 15px; }
+        .select-all-container { grid-column: 1 / -1; display: flex; align-items: center; background-color: #f0f0f0; padding: 10px; border-radius: 8px;}
+        .select-all-container label { margin: 0; flex-grow: 1; }
+        .product-counts { text-align: right; margin-bottom: 10px; font-size: 0.9em; }
+        .fitur-container { display: flex; flex-direction: column; gap: 10px; }
+        .fitur-item { display: flex; align-items: center; }
+        .fitur-item input { width: auto; margin-right: 10px; }
+        .fitur-item label { margin: 0; font-weight: normal; }
+        .price-group { display: flex; gap: 15px; }
+        .price-group .form-group { flex: 1; }
+        .price-display { display: flex; align-items: center; gap: 8px; font-size: 14px; margin-top: 4px; }
+        .price-normal { text-decoration: line-through; color: #9e9e9e; }
+        .price-diskon { font-weight: bold; color: var(--nippori-red); }
+        .diskon-badge { background-color: var(--nippori-red); color: white; font-size: 10px; padding: 2px 5px; border-radius: 4px; font-weight: bold; }
+        .discount-preview { text-align: right; font-weight: bold; color: var(--nippori-red); height: 1em; margin-top: -15px; margin-bottom: 10px; }
+        .bulk-edit-container { background-color: #f1f3f5; padding: 15px; border-radius: 8px; margin-top: 20px; }
+        .batch-generator { display: flex; gap: 10px; align-items: center; }
+        .batch-generator input { flex: 1; }
+        .batch-generator button { width: auto; flex-shrink: 0; padding: 12px 15px;}
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .stat-card { background: #fff; padding: 20px; border-radius: 12px; text-align: center; }
+        .stat-card.clickable { cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+        .stat-card.clickable:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
+        .stat-card h3 { margin-top: 0; color: var(--nippori-blue); }
+        .stat-card .stat-number { font-size: 2.5em; font-weight: 700; color: var(--nippori-gold); }
+        .stat-card .stat-label { font-size: 0.9em; color: var(--dark-gray); margin-top: -10px; }
+        .low-stock-list, .sold-items-list, .master-report-list, #download-links-list { list-style: none; padding: 0; text-align: left; }
+        .low-stock-list li, .sold-items-list li, .master-report-list li, #download-links-list li { padding: 8px; border-bottom: 1px solid var(--border-color); }
+        .low-stock-list li { cursor: default; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .low-stock-list li:hover { background-color: #f1f3f5; }
+        .low-stock-image { width: 40px; height: 40px; object-fit: cover; border-radius: 6px; }
+        .low-stock-details { display: flex; align-items: center; gap: 10px; flex-grow: 1; }
+        .low-stock-actions { display: flex; gap: 8px;}
+        #history-modal-list, #sold-items-modal-list, #master-report-modal-list, #download-links-list { max-height: 400px; overflow-y: auto; }
+        #history-modal-list li, #sold-items-modal-list li, .master-report-list li, #download-links-list li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
+        #history-modal-list .change-plus, #sold-items-modal-list .change-plus { color: var(--success); }
+        #history-modal-list .change-minus, #sold-items-modal-list .change-minus { color: var(--nippori-red); }
+        #sold-items-totals { text-align: center; margin-bottom: 20px; padding: 10px; background-color: #f0f0f0; border-radius: 8px; }
+        #pdf-options-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;}
+        .batch-subheader { font-size: 1em; font-weight: bold; color: var(--dark-gray); margin-top: 15px; margin-bottom: 5px; padding-bottom: 5px; border-bottom: 1px solid var(--border-color); }
+        .batch-subheader:first-child { margin-top: 0; }
+        #pagination-container, #low-stock-pagination-container { display: flex; justify-content: center; align-items: center; margin-top: 20px; }
+        .page-btn { background-color: #fff; color: var(--nippori-blue); border: 1px solid var(--border-color); padding: 8px 12px; margin: 0 4px; cursor: pointer; width: auto; }
+        .page-btn:hover, .page-btn.active { background-color: var(--nippori-blue); color: white; }
+        #notification-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; align-items: flex-end; }
+        .notification { padding: 15px 20px; border-radius: 8px; color: white; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.15); opacity: 0; transform: translateX(calc(100% + 20px)); transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); }
+        .notification.show { opacity: 1; transform: translateX(0); }
+        .notification.success { background-color: var(--success); }
+        .notification.error { background-color: var(--nippori-red); }
+        .notification.info { background-color: var(--nippori-blue); }
+    </style>
+</head>
+<body>
+
+    <section id="login-section">
+        <div class="login-card">
+            <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/4QBmRXhpZgAATU0AKgAAAAgABgESAAMAAAABAAEAAAEaAAUAAAABAAAAVgEbAAUAAAABAAAAXgEoAAMAAAABAAIAAAITAAMAAAABAAEAAIdpAAQAAAABAAAAZgAAAMAAAABgAAAAAQAAAGAAAAABAAAAAAAAAAYAAJAHAAQAAAAwMjEwAZEHAAQAAAABAgMAAKAHAAQAAAAwMTAwAaADAAEAAAABAAAAAqADAAEAAAABAAAAyqQDAAEAAAABAAAAAKACAAEAAAABAAAAyAAAAAAA/+AAEEpGSUYAAQEAAAEAAQAA/9sAQwADAgIDAgIDAwMDBAMDBAUIBQUEBAUKBwcGCAwKDAwLCgsLDQ4SEA0OEQ4LCxAWEBETFBUVFQwPFxgWFBgSFBUU/9sAQwEDBAQFBAUJBQUJFA0LDRQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQU/8AAEQgAyADIAwEiAAIRAQMRAf/EAB8AAAEFAQEBAQEBAAAAAAAAAAABAgMEBQYHCAkKC//EALUQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1VWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1VWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4+Tl5ufo6ery8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD9U6KKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooA//Z" alt="Logo Nippori" class="login-logo">
+            <h1>Selamat Datang</h1>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <p id="login-error"></p>
+                <button type="submit" id="login-btn">Login</button>
+            </form>
+            <form id="signup-form" style="display: none;">
+                <div class="form-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" minlength="6" required>
+                </div>
+                <p id="signup-message"></p>
+                <button type="submit" id="signup-btn">Daftar</button>
+            </form>
+            <div class="auth-toggle">
+                <span id="toggle-text">Belum punya akun? </span>
+                <button id="toggle-auth-btn" class="auth-toggle-btn">Daftar di sini</button>
+            </div>
+        </div>
+    </section>
+
+    <div class="main-app-container" id="main-app">
+        <nav class="main-nav">
+            <div class="nav-header">Nippori Sistem</div>
+            <ul class="nav-links" id="nav-links-list">
+                <li><a href="#dashboard" class="nav-link active">Dashboard</a></li>
+                <li><a href="#produk" class="nav-link">Produk</a></li>
+                <li><a href="#data-list" class="nav-link">Data List</a></li>
+                <li><a href="#deskripsi" class="nav-link">Deskripsi Detail</a></li>
+                </ul>
+            <button id="logout-btn">Logout</button>
+        </nav>
+
+        <main class="main-content">
+            <section id="kelola-user" class="content-section">
+                <h1>Kelola Pengguna</h1>
+                <div class="card">
+                    <h2>Daftar User</h2>
+                    <table id="user-management-table">
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user-list-body">
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <section id="dashboard" class="content-section active">
+                <h1>Dashboard</h1>
+                <div class="dashboard-grid">
+                    <div class="stat-card clickable" id="master-products-card">
+                        <h3>Total Produk Master</h3>
+                        <p class="stat-number" id="total-master-products">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Varian Unik</h3>
+                        <p class="stat-number" id="total-unique-variants">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Stok Barang</h3>
+                        <p class="stat-number" id="total-stock-items">0</p>
+                    </div>
+                    <div class="stat-card clickable" id="sold-items-card">
+                        <h3>Barang Terjual</h3>
+                        <p class="stat-number" id="total-items-sold">0</p>
+                        <p class="stat-label">(30 Hari Terakhir)</p>
+                    </div>
+                     <div class="stat-card">
+                        <h3>Total Pendapatan</h3>
+                        <p class="stat-number" id="total-revenue">Rp 0</p>
+                        <p class="stat-label">(30 Hari Terakhir)</p>
+                    </div>
+                </div>
+                <div class="card" style="margin-top: 30px;">
+                    <h2>Produk Stok Menipis</h2>
+                    <div class="filter-container" style="margin-bottom: 15px; grid-template-columns: 1fr;">
+                        <input type="text" id="low-stock-batch-filter" list="low-stock-batch-suggestions" placeholder="Filter berdasarkan batch...">
+                        <datalist id="low-stock-batch-suggestions"></datalist>
+                    </div>
+                    <ul id="low-stock-list" class="low-stock-list"></ul>
+                    <div id="low-stock-pagination-container"></div>
+                </div>
+            </section>
+
+            <section id="produk" class="content-section">
+                <h1>Produk</h1>
+                <div class="card">
+                    <h2>Buat / Edit Master Produk</h2>
+                    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                        <button id="save-master-btn" style="flex: 1;">Simpan Master Produk</button>
+                        <button id="duplicate-master-btn" style="flex: 1; background-color: var(--dark-gray); color: white;">Duplikat</button>
+                        <button id="delete-master-btn" style="flex: 1; background-color: var(--nippori-red); color: white;">Hapus Master</button>
+                    </div>
+                    <p>Langkah pertama: Buat atau edit detail utama produk di sini sebelum menambahkan varian.</p>
+                    <div class="form-group">
+                        <label for="master-judul">Judul Produk</label>
+                        <input type="text" id="master-judul" list="master-judul-suggestions" placeholder="Buat judul baru atau pilih yang sudah ada">
+                        <datalist id="master-judul-suggestions"></datalist>
+                    </div>
+                     <div class="form-group">
+                        <label for="master-gambar">Gambar Utama</label>
+                        <input type="file" id="master-gambar" accept="image/*">
+                        <img id="master-gambar-preview" src="" alt="Preview Gambar Utama" style="max-width: 100px; margin-top: 10px; display: none;">
+                    </div>
+                    <div class="form-group">
+                        <label for="master-kondisi">Kondisi</label>
+                        <select id="master-kondisi">
+                            <option value="New">New</option>
+                            <option value="Open Box">Open Box</option>
+                            <option value="Preloved (Used)">Preloved (Used)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="master-rilis">Rilis</label>
+                        <input type="month" id="master-rilis">
+                    </div>
+                    <div class="form-group">
+                        <label for="master-asal">Asal</label>
+                        <input type="text" id="master-asal" placeholder="Contoh: Jepang">
+                    </div>
+                    <div class="form-group">
+                        <label for="master-brand">Brand</label>
+                        <input type="text" id="master-brand" list="brand-suggestions" placeholder="Contoh: Bandai">
+                        <datalist id="brand-suggestions"></datalist>
+                    </div>
+                    <div class="form-group">
+                        <label>Fitur Produk</label>
+                        <div class="fitur-container">
+                            <div class="fitur-item"><input type="checkbox" id="fitur-1" value="Original Jepang"><label for="fitur-1">Original Jepang</label></div>
+                            <div class="fitur-item"><input type="checkbox" id="fitur-2" value="Detail Kualitas Tinggi"><label for="fitur-2">Detail Kualitas Tinggi</label></div>
+                            <div class="fitur-item"><input type="checkbox" id="fitur-3" value="Include Line Up Paper"><label for="fitur-3">Include Line Up Paper</label></div>
+                            <div class="fitur-item"><input type="checkbox" id="fitur-4" value="No Gacha Ball"><label for="fitur-4">No Gacha Ball</label></div>
+                        </div>
+                    </div>
+                     <div class="form-group">
+                        <label for="master-keterangan">Keterangan (Opsional)</label>
+                        <textarea id="master-keterangan" rows="3" placeholder="Catatan tambahan untuk produk ini..."></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <section id="data-list" class="content-section">
+                <h1>Data List</h1>
+                <div class="card">
+                    <h2>Input Varian</h2>
+                    <p>Langkah kedua: Pilih judul produk, lalu tambahkan varian-variannya di sini.</p>
+                    <div class="form-group">
+                        <label for="judul-pilihan">Pilih Judul Produk</label>
+                        <input type="text" id="judul-pilihan" list="judul-pilihan-suggestions" placeholder="Ketik untuk mencari judul...">
+                        <datalist id="judul-pilihan-suggestions"></datalist>
+                    </div>
+                    <div class="form-group"><label for="total-variant">Jumlah Varian untuk Ditambahkan:</label><input type="number" id="total-variant" min="1"></div>
+                    <div class="form-group">
+                        <label for="batch-month-picker">Bulan Barang Masuk</label>
+                        <div class="batch-generator">
+                            <input type="month" id="batch-month-picker">
+                        </div>
+                    </div>
+                    <div class="form-group"><label for="batch-tag">Batch (Tag):</label><input type="text" id="batch-tag" placeholder="Kode batch akan dibuat otomatis..."><datalist id="batch-suggestions"></datalist></div>
+                    
+                    <div class="bulk-edit-container">
+                        <h4>Ubah Massal (Opsional)</h4>
+                        <div class="price-group">
+                            <div class="form-group"><label>Harga Normal Massal:</label><input type="number" id="bulk-harga-normal" min="0"></div>
+                            <div class="form-group"><label>Harga Diskon Massal:</label><input type="number" id="bulk-harga-diskon" min="0"></div>
+                            <div class="form-group"><label>Stok Massal:</label><input type="number" id="bulk-stok" min="0"></div>
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px solid var(--border-color); margin: 20px 0;">
+                    <div id="variant-inputs-container"></div>
+                    <button id="submit-variants-btn" style="display: none;">Simpan Semua Varian</button>
+                </div>
+                
+                <div class="card product-list-card">
+                     <h2>Daftar Semua Produk</h2>
+                    <div class="product-list-header">
+                        <div class="filter-container">
+                            <input type="text" id="search-input" placeholder="Cari berdasarkan judul, varian, batch, atau kode...">
+                            <input type="text" id="batch-filter" list="batch-suggestions" placeholder="Filter berdasarkan batch...">
+                            <select id="sort-filter">
+                                <option value="desc">Urutkan: Terbaru</option>
+                                <option value="asc">Urutkan: Terlama</option>
+                            </select>
+                        </div>
+                        <div class="select-all-container">
+                            <label for="select-all-filtered">Pilih Semua</label>
+                            <input type="checkbox" id="select-all-filtered">
+                        </div>
+                        <div id="product-counts"></div>
+                    </div>
+                    <div id="product-list-container"></div>
+                     <div id="pagination-container"></div>
+                    <div class="product-list-footer">
+                        <div class="footer-actions-wrapper">
+                            <div class="actions-container">
+                                <button id="print-pdf-btn">Print ke PDF</button>
+                                <button id="print-thermal-btn">Cetak Label Thermal</button>
+                            </div>
+                            <div class="actions-container">
+                                 <button id="download-images-btn">Unduh Gambar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="deskripsi" class="content-section">
+                <h1>Deskripsi Detail</h1>
+                <div class="card">
+                    <h2>Generate Deskripsi untuk Shopee</h2>
+                    <p>Langkah ketiga: Pilih judul produk untuk membuat deskripsi lengkap yang siap disalin.</p>
+                     <div class="form-group">
+                        <label for="desc-judul-pilihan">Pilih Judul Produk</label>
+                         <input type="text" id="desc-judul-pilihan" list="desc-judul-pilihan-suggestions" placeholder="Ketik untuk mencari judul...">
+                         <datalist id="desc-judul-pilihan-suggestions"></datalist>
+                    </div>
+                    <textarea id="generated-description" readonly rows="15"></textarea>
+                    <br><br>
+                    <button id="copy-description-btn">Salin Deskripsi</button>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <div id="image-popup" class="modal-overlay">
+         <button id="image-popup-close" class="modal-close">&times;</button>
+        <div class="modal-content"><img id="popup-img" src=""></div>
+    </div>
+    <div id="edit-modal" class="modal-overlay">
+        <div class="modal-inner-content">
+            <button id="edit-modal-close" class="modal-close">&times;</button>
+            <h2>Edit Varian</h2>
+            <input type="hidden" id="edit-uuid">
+             <div class="form-group">
+                <label for="edit-variant-name">Nama Varian</label>
+                <input type="text" id="edit-variant-name">
+            </div>
+             <div class="price-group">
+                <div class="form-group"><label>Harga Normal:</label><input type="number" id="edit-harga-normal" min="0"></div>
+                <div class="form-group"><label>Harga Diskon:</label><input type="number" id="edit-harga-diskon" min="0"></div>
+            </div>
+            <div class="form-group">
+                <label for="edit-stok">Stok Baru</label>
+                <input type="number" id="edit-stok" min="0">
+            </div>
+             <div class="form-group">
+                <label for="edit-stok-note-select">Catatan Perubahan Stok</label>
+                <select id="edit-stok-note-select">
+                    <option value="Terjual">Terjual</option>
+                    <option value="Barang Masuk">Barang Masuk</option>
+                    <option value="Koreksi Manual">Koreksi Manual</option>
+                    <option value="Retur">Retur</option>
+                    <option value="Rusak">Rusak</option>
+                    <option value="Lainnya">Lainnya...</option>
+                </select>
+            </div>
+            <div class="form-group" id="edit-stok-note-other-container" style="display: none;">
+                <label for="edit-stok-note-other">Catatan Lainnya</label>
+                <input type="text" id="edit-stok-note-other" placeholder="Masukkan catatan custom">
+            </div>
+            <hr>
+             <div class="form-group">
+                <label for="edit-batch">Batch</label>
+                <input type="text" id="edit-batch" list="batch-suggestions">
+            </div>
+            <div class="form-group">
+                <label for="edit-lokasi">Lokasi Fisik</label>
+                <input type="text" id="edit-lokasi">
+            </div>
+            <div class="form-group">
+                <label for="edit-batas-minimum">Batas Minimum Stok</label>
+                <input type="number" id="edit-batas-minimum" min="0">
+            </div>
+             <div class="form-group">
+                <label for="edit-gambar-variant">Gambar Varian</label>
+                <input type="file" id="edit-gambar-variant" accept="image/*">
+                <img id="edit-gambar-preview" src="" style="max-width: 100px; margin-top: 10px;">
+            </div>
+            <button id="save-edit-btn">Simpan Perubahan</button>
+        </div>
+    </div>
+    <div id="quick-add-modal" class="modal-overlay">
+        <div class="modal-inner-content">
+             <button id="quick-add-modal-close" class="modal-close">&times;</button>
+             <h2 id="quick-add-title"></h2>
+             <input type="hidden" id="quick-add-judul">
+             <div class="form-group">
+                 <label>Nama Varian (Pilih yang ada untuk restock, atau ketik baru)</label>
+                 <input type="text" id="quick-add-variant-name" list="quick-add-variant-suggestions">
+                 <datalist id="quick-add-variant-suggestions"></datalist>
+             </div>
+              <div class="price-group">
+                <div class="form-group"><label>Harga Normal:</label><input type="number" id="quick-add-harga-normal" min="0"></div>
+                <div class="form-group"><label>Harga Diskon:</label><input type="number" id="quick-add-harga-diskon" min="0"></div>
+            </div>
+             <div class="form-group"><label>Jumlah Stok:</label><input type="number" id="quick-add-stok" min="1"></div>
+             <div class="form-group"><label>Batch (Opsional):</label><input type="text" id="quick-add-batch" list="batch-suggestions"></div>
+             <div class="form-group"><label>Gambar Varian (Opsional):</label><input type="file" id="quick-add-gambar" accept="image/*"></div>
+             <button id="quick-add-save-btn">Simpan</button>
+        </div>
+    </div>
+    <div id="history-modal" class="modal-overlay">
+         <div class="modal-inner-content">
+             <button id="history-modal-close" class="modal-close">&times;</button>
+             <h2 id="history-modal-title">Riwayat Stok</h2>
+             <ul id="history-modal-list"></ul>
+         </div>
+    </div>
+    <div id="sold-items-modal" class="modal-overlay">
+         <div class="modal-inner-content">
+             <button id="sold-items-modal-close" class="modal-close">&times;</button>
+             <h2>Riwayat Barang Terjual</h2>
+             <div id="sold-items-totals"></div>
+             <div class="filter-container">
+                 <div class="form-group">
+                     <label for="sold-start-date">Dari Tanggal</label>
+                     <input type="date" id="sold-start-date">
+                 </div>
+                 <div class="form-group">
+                     <label for="sold-end-date">Sampai Tanggal</label>
+                     <input type="date" id="sold-end-date">
+                 </div>
+             </div>
+             <ul id="sold-items-modal-list" class="sold-items-list"></ul>
+         </div>
+    </div>
+    <div id="master-report-modal" class="modal-overlay">
+        <div class="modal-inner-content">
+            <button id="master-report-modal-close" class="modal-close">&times;</button>
+            <h2>Laporan Produk Master</h2>
+            <div class="filter-container">
+                <div class="form-group">
+                    <label for="master-report-sort">Urutkan</label>
+                    <select id="master-report-sort">
+                        <option value="desc">Terbaru</option>
+                        <option value="asc">Terlama</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="master-report-rilis-start">Rilis Dari</label>
+                    <input type="month" id="master-report-rilis-start">
+                </div>
+                <div class="form-group">
+                    <label for="master-report-rilis-end">Rilis Sampai</label>
+                    <input type="month" id="master-report-rilis-end">
+                </div>
+            </div>
+            <ul id="master-report-modal-list" class="master-report-list"></ul>
+        </div>
+    </div>
+    <div id="pdf-options-modal" class="modal-overlay">
+        <div class="modal-inner-content">
+            <button id="pdf-options-modal-close" class="modal-close">&times;</button>
+            <h2>Pilih Data untuk Dicetak di PDF</h2>
+            <div id="pdf-options-container">
+                <div class="fitur-item"><input type="checkbox" id="pdf-opt-gambar" checked><label for="pdf-opt-gambar">Gambar Varian</label></div>
+                <div class="fitur-item"><input type="checkbox" id="pdf-opt-kode" checked><label for="pdf-opt-kode">Kode Produk</label></div>
+                <div class="fitur-item"><input type="checkbox" id="pdf-opt-stok" checked><label for="pdf-opt-stok">Stok</label></div>
+                <div class="fitur-item"><input type="checkbox" id="pdf-opt-harga-normal" checked><label for="pdf-opt-harga-normal">Harga Normal</label></div>
+                <div class="fitur-item"><input type="checkbox" id="pdf-opt-harga-diskon" checked><label for="pdf-opt-harga-diskon">Harga Diskon</label></div>
+                <div class="fitur-item"><input type="checkbox" id="pdf-opt-persen-diskon" checked><label for="pdf-opt-persen-diskon">Persentase Diskon</label></div>
+                <div class="fitur-item"><input type="checkbox" id="pdf-opt-batch"><label for="pdf-opt-batch">Batch</label></div>
+                <div class="fitur-item"><input type="checkbox" id="pdf-opt-lokasi"><label for="pdf-opt-lokasi">Lokasi</label></div>
+            </div>
+            <br>
+            <button id="generate-pdf-btn">Buat PDF</button>
+        </div>
+    </div>
+     <div id="download-images-modal" class="modal-overlay">
+        <div class="modal-inner-content">
+            <button id="download-images-modal-close" class="modal-close">&times;</button>
+            <h2>Unduh Gambar Terpilih</h2>
+            <p>Klik link di bawah ini satu per satu untuk mengunduh gambar.</p>
+            <ul id="download-links-list"></ul>
+        </div>
+    </div>
+
+     <script type="application/json" id="manifest">
+        {
+            "name": "Nippori Sistem",
+            "short_name": "Nippori",
+            "start_url": ".",
+            "display": "standalone",
+            "background_color": "#ffffff",
+            "theme_color": "#1E2A4D",
+            "icons": [
+                {
+                    "src": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wgARCAAoACgDAREAAhEBAxEB/8QAHAABAAICAwEAAAAAAAAAAAAAAAYHBAUBAgMI/8QAGQEBAQEBAQEAAAAAAAAAAAAAAAECAwQG/9oADAMBAAIQAxAAAAD3wAAAAA4c2s3G9Z58S2lT1vEa4SklLqV7dE4+lQAAAAAP/EACQQAQACAQIGAgMAAAAAAAAAAAUDBAYBAgcIERITFCEiMTJR/9oACAEBAAEFAv68FvHkPqL5e22T2K+Poe36S9s6Pj+hL3fR2z+m/pG7RkPqL+Y7rG/c55e67R2K+Xuv0v6S9u6Pj+h/3fR2wum/pG794//xAAUEQEAAAAAAAAAAAAAAAAAAAAg/9oACAEDAQE/AR//xAAUEQEAAAAAAAAAAAAAAAAAAAAg/9oACAECAQE/AR//xAAsEAABAgIABAQGAwAAAAAAAAABAgMEAAUREhMhFCAxUVIQIiMyQUNQYXHB/9oACAEBAAY/Av2K7V94w3g4xU4gY6g/QxhvAxeoP0cYbwMvUF+jjDeBle/X6OMN4GV78v0cYaX2q7V9oQ3gYzUF+jjDeBjNQv0cYaXv8v0cYaXvy/RxhpfbL9HGGl9qufeEN4GJ1Bfo4w3gYnUv6OMNL7JfY4w0vtl9jjDS92X6OMNL3Zfo4w0vtl9jjDS+1Xav/2Q==",
+                    "sizes": "192x192",
+                    "type": "image/jpeg"
+                }
+            ]
+        }
+    </script>
+    <script>
+    // --- (BAGIAN 1: KONEKSI & OTENTIKASI) ---
+    const SUPABASE_URL = 'https://ishymqozzxceldthraix.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlzaHltcW96enhjZWxkdGhyYWl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY2OTAwNzAsImV4cCI6MjA3MjI2NjA3MH0.djOPVre3P0XgFKRG9JL90K9Fqr9BG_2MuRL8vh-0NWA';
+
+    const supabase = supabase_js.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // --- State Variables ---
+    let products = [];
+    let productMasters = {};
+    let currentUserProfile = null; // To store logged-in user's role and data
+
+    // Element Selectors for Auth
+    const loginSection = document.getElementById('login-section');
+    const mainAppContainer = document.getElementById('main-app');
+    const loginForm = document.getElementById('login-form');
+    const signupForm = document.getElementById('signup-form');
+    const loginErrorEl = document.getElementById('login-error');
+    const signupMessageEl = document.getElementById('signup-message');
+    const toggleAuthBtn = document.getElementById('toggle-auth-btn');
+    const toggleText = document.getElementById('toggle-text');
+    const logoutBtn = document.getElementById('logout-btn');
+    const navLinksList = document.getElementById('nav-links-list');
+
+
+    // --- Core Functions: Authentication & Authorization ---
+    async function handleLogin(event) {
+        event.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+        if (error) {
+            loginErrorEl.textContent = 'Login gagal: ' + error.message;
+        } else {
+            loginErrorEl.textContent = '';
+        }
+    }
+
+    async function handleSignup(event) {
+        event.preventDefault();
+        const email = document.getElementById('signup-email').value;
+        const password = document.getElementById('signup-password').value;
+        const { data, error } = await supabase.auth.signUp({ email, password });
+
+        if (error) {
+            signupMessageEl.textContent = 'Daftar gagal: ' + error.message;
+            signupMessageEl.classList.remove('success');
+        } else {
+            signupMessageEl.textContent = 'Pendaftaran berhasil! Silakan cek email Anda untuk verifikasi.';
+            signupMessageEl.classList.add('success');
+        }
+    }
+
+    async function handleLogout() {
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+            console.error('Logout error:', error);
+        }
+    }
+    
+    function toggleAuthForms() {
+        const isLoginFormVisible = loginForm.style.display !== 'none';
+        if (isLoginFormVisible) {
+            loginForm.style.display = 'none';
+            signupForm.style.display = 'block';
+            toggleText.textContent = 'Sudah punya akun? ';
+            toggleAuthBtn.textContent = 'Login di sini';
+        } else {
+            loginForm.style.display = 'block';
+            signupForm.style.display = 'none';
+            toggleText.textContent = 'Belum punya akun? ';
+            toggleAuthBtn.textContent = 'Daftar di sini';
+        }
+    }
+
+    async function getUserProfile(userId) {
+        const { data, error } = await supabase
+            .from('profiles')
+            .select('id, email, role')
+            .eq('id', userId)
+            .single();
+        return data;
+    }
+
+    function setupUIForUserRole(profile) {
+        // Clear any existing admin links
+        const existingAdminLink = document.getElementById('admin-nav-link');
+        if (existingAdminLink) existingAdminLink.remove();
+
+        if (profile && profile.role === 'admin') {
+            const adminLi = document.createElement('li');
+            adminLi.id = 'admin-nav-link';
+            adminLi.innerHTML = `<a href="#kelola-user" class="nav-link">Kelola User</a>`;
+            navLinksList.appendChild(adminLi);
+        }
+        addNavLinksEventListeners(); // Re-add event listeners to include the new link
+    }
+
+
+    // --- Main Auth State Listener ---
+    supabase.auth.onAuthStateChange(async (event, session) => {
+        if (session && session.user) {
+            currentUserProfile = await getUserProfile(session.user.id);
+            setupUIForUserRole(currentUserProfile);
+            loginSection.style.display = 'none';
+            mainAppContainer.classList.add('visible');
+            await loadAllDataFromSupabase();
+            filterAndRenderAll();
+        } else {
+            currentUserProfile = null;
+            loginSection.style.display = 'flex';
+            mainAppContainer.classList.remove('visible');
+        }
+    });
+
+
+    // --- (BAGIAN 2: LOGIKA APLIKASI UTAMA) ---
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // --- AUTH EVENT LISTENERS ---
+        loginForm.addEventListener('submit', handleLogin);
+        signupForm.addEventListener('submit', handleSignup);
+        toggleAuthBtn.addEventListener('click', toggleAuthForms);
+        logoutBtn.addEventListener('click', handleLogout);
+
+        // --- Element Selectors (pindahkan dari global ke sini) ---
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.content-section');
+        const totalMasterProductsEl = document.getElementById('total-master-products');
+        const totalUniqueVariantsEl = document.getElementById('total-unique-variants');
+        const totalStockItemsEl = document.getElementById('total-stock-items');
+        const totalItemsSoldEl = document.getElementById('total-items-sold');
+        const totalRevenueEl = document.getElementById('total-revenue');
+        const lowStockListEl = document.getElementById('low-stock-list');
+        const soldItemsCard = document.getElementById('sold-items-card');
+        const masterProductsCard = document.getElementById('master-products-card');
+        const lowStockBatchFilter = document.getElementById('low-stock-batch-filter');
+        const lowStockBatchSuggestions = document.getElementById('low-stock-batch-suggestions');
+        const lowStockPaginationContainer = document.getElementById('low-stock-pagination-container');
+        const masterJudulInput = document.getElementById('master-judul');
+        const masterJudulSuggestions = document.getElementById('master-judul-suggestions');
+        const masterGambarInput = document.getElementById('master-gambar');
+        const masterGambarPreview = document.getElementById('master-gambar-preview');
+        const masterKondisiSelect = document.getElementById('master-kondisi');
+        const masterRilisInput = document.getElementById('master-rilis');
+        const masterAsalInput = document.getElementById('master-asal');
+        const masterBrandInput = document.getElementById('master-brand');
+        const brandSuggestions = document.getElementById('brand-suggestions');
+        const fiturCheckboxes = Array.from(document.querySelectorAll('[id^="fitur-"]'));
+        const masterKeteranganInput = document.getElementById('master-keterangan');
+        const saveMasterBtn = document.getElementById('save-master-btn');
+        const duplicateMasterBtn = document.getElementById('duplicate-master-btn');
+        const deleteMasterBtn = document.getElementById('delete-master-btn');
+        const judulPilihanInput = document.getElementById('judul-pilihan');
+        const judulPilihanSuggestions = document.getElementById('judul-pilihan-suggestions');
+        const totalVariantInput = document.getElementById('total-variant');
+        const batchMonthPicker = document.getElementById('batch-month-picker');
+        const batchTagInput = document.getElementById('batch-tag');
+        const batchSuggestions = document.getElementById('batch-suggestions');
+        const variantInputsContainer = document.getElementById('variant-inputs-container');
+        const submitVariantsBtn = document.getElementById('submit-variants-btn');
+        const productListContainer = document.getElementById('product-list-container');
+        const searchInput = document.getElementById('search-input');
+        const batchFilter = document.getElementById('batch-filter');
+        const sortFilter = document.getElementById('sort-filter');
+        const selectAllFilteredCheckbox = document.getElementById('select-all-filtered');
+        const productCounts = document.getElementById('product-counts');
+        const printPdfBtn = document.getElementById('print-pdf-btn');
+        const printThermalBtn = document.getElementById('print-thermal-btn');
+        const downloadImagesBtn = document.getElementById('download-images-btn');
+        const bulkHargaNormalInput = document.getElementById('bulk-harga-normal');
+        const bulkHargaDiskonInput = document.getElementById('bulk-harga-diskon');
+        const bulkStokInput = document.getElementById('bulk-stok');
+        const descJudulPilihanInput = document.getElementById('desc-judul-pilihan');
+        const descJudulPilihanSuggestions = document.getElementById('desc-judul-pilihan-suggestions');
+        const generatedDescriptionTextarea = document.getElementById('generated-description');
+        const copyDescriptionBtn = document.getElementById('copy-description-btn');
+        const imagePopup = document.getElementById('image-popup');
+        const popupImg = document.getElementById('popup-img');
+        const imagePopupClose = document.getElementById('image-popup-close');
+        const editModal = document.getElementById('edit-modal');
+        const editModalClose = document.getElementById('edit-modal-close');
+        const editUuidInput = document.getElementById('edit-uuid');
+        const editVariantNameInput = document.getElementById('edit-variant-name');
+        const editHargaNormalInput = document.getElementById('edit-harga-normal');
+        const editHargaDiskonInput = document.getElementById('edit-harga-diskon');
+        const editStokInput = document.getElementById('edit-stok');
+        const editStokNoteSelect = document.getElementById('edit-stok-note-select');
+        const editStokNoteOtherContainer = document.getElementById('edit-stok-note-other-container');
+        const editStokNoteOtherInput = document.getElementById('edit-stok-note-other');
+        const editBatchInput = document.getElementById('edit-batch');
+        const editLokasiInput = document.getElementById('edit-lokasi');
+        const editBatasMinimumInput = document.getElementById('edit-batas-minimum');
+        const editGambarVariantInput = document.getElementById('edit-gambar-variant');
+        const editGambarPreview = document.getElementById('edit-gambar-preview');
+        const saveEditBtn = document.getElementById('save-edit-btn');
+        const quickAddModal = document.getElementById('quick-add-modal');
+        const quickAddModalClose = document.getElementById('quick-add-modal-close');
+        const quickAddTitle = document.getElementById('quick-add-title');
+        const quickAddJudulInput = document.getElementById('quick-add-judul');
+        const quickAddVariantNameInput = document.getElementById('quick-add-variant-name');
+        const quickAddVariantSuggestions = document.getElementById('quick-add-variant-suggestions');
+        const quickAddStokInput = document.getElementById('quick-add-stok');
+        const quickAddBatchInput = document.getElementById('quick-add-batch');
+        const quickAddHargaNormalInput = document.getElementById('quick-add-harga-normal');
+        const quickAddHargaDiskonInput = document.getElementById('quick-add-harga-diskon');
+        const quickAddGambarInput = document.getElementById('quick-add-gambar');
+        const quickAddSaveBtn = document.getElementById('quick-add-save-btn');
+        const historyModal = document.getElementById('history-modal');
+        const historyModalClose = document.getElementById('history-modal-close');
+        const historyModalTitle = document.getElementById('history-modal-title');
+        const historyModalList = document.getElementById('history-modal-list');
+        const soldItemsModal = document.getElementById('sold-items-modal');
+        const soldItemsModalClose = document.getElementById('sold-items-modal-close');
+        const soldItemsModalList = document.getElementById('sold-items-modal-list');
+        const soldStartDateInput = document.getElementById('sold-start-date');
+        const soldEndDateInput = document.getElementById('sold-end-date');
+        const soldItemsTotalsEl = document.getElementById('sold-items-totals');
+        const masterReportModal = document.getElementById('master-report-modal');
+        const masterReportModalClose = document.getElementById('master-report-modal-close');
+        const masterReportModalList = document.getElementById('master-report-modal-list');
+        const masterReportSort = document.getElementById('master-report-sort');
+        const masterReportRilisStart = document.getElementById('master-report-rilis-start');
+        const masterReportRilisEnd = document.getElementById('master-report-rilis-end');
+        const pdfOptionsModal = document.getElementById('pdf-options-modal');
+        const pdfOptionsModalClose = document.getElementById('pdf-options-modal-close');
+        const generatePdfBtn = document.getElementById('generate-pdf-btn');
+        const downloadImagesModal = document.getElementById('download-images-modal');
+        const downloadImagesModalClose = document.getElementById('download-images-modal-close');
+        const downloadLinksList = document.getElementById('download-links-list');
+        const userListBody = document.getElementById('user-list-body');
+        
+        let lowStockCurrentPage = 1;
+        const lowStockItemsPerPage = 5;
+
+        // --- Notification System ---
+        const notificationContainer = document.createElement('div');
+        notificationContainer.id = 'notification-container';
+        document.body.appendChild(notificationContainer);
+
+        function showNotification(message, type = 'success') {
+            const notif = document.createElement('div');
+            notif.className = `notification ${type}`;
+            notif.textContent = message;
+            notificationContainer.appendChild(notif);
+            setTimeout(() => { notif.classList.add('show'); }, 10);
+            setTimeout(() => {
+                notif.classList.remove('show');
+                notif.addEventListener('transitionend', () => notif.remove());
+            }, 3000);
+        }
+
+        // --- Core Functions: Data Loading ---
+        window.loadAllDataFromSupabase = async function() {
+            showNotification('Memuat data dari database...', 'info');
+
+            const { data: variantData, error: variantError } = await supabase
+                .from('product_variants')
+                .select(`
+                    *,
+                    product_masters (
+                        title,
+                        main_image_url,
+                        condition,
+                        release_month,
+                        origin,
+                        brand,
+                        features,
+                        description
+                    )
+                `);
+
+            if (variantError) {
+                console.error('Gagal mengambil varian:', variantError);
+                products = [];
+            } else {
+                 products = variantData.map(v => ({
+                    uuid: v.id,
+                    master_id: v.master_id,
+                    judul: v.product_masters.title, // Ambil judul dari master
+                    variant: v.variant_name,
+                    stok: v.stock,
+                    batchTag: v.batch_tag,
+                    gambar: v.variant_image_url,
+                    kode: v.product_code,
+                    lokasi: v.location,
+                    batasMinimum: v.min_stock_limit,
+                    hargaNormal: v.normal_price,
+                    hargaDiskon: v.discount_price,
+                    // history: v.history, // history needs separate fetch
+                    lastModified: v.created_at,
+                 }));
+            }
+
+            const { data: masterData, error: masterError } = await supabase
+                .from('product_masters')
+                .select('*');
+
+            if (masterError) {
+                console.error('Gagal mengambil master:', masterError);
+                productMasters = {};
+            } else {
+                productMasters = masterData.reduce((acc, master) => {
+                    acc[master.title] = {
+                        id: master.id,
+                        gambar: master.main_image_url,
+                        kondisi: master.condition,
+                        rilis: master.release_month,
+                        asal: master.origin,
+                        brand: master.brand,
+                        fitur: master.features,
+                        keterangan: master.description,
+                        createdAt: master.created_at,
+                        lastModified: master.created_at
+                    };
+                    return acc;
+                }, {});
+            }
+            showNotification('Data berhasil dimuat!', 'success');
+        }
+
+
+        // --- Navigation Logic ---
+        function addNavLinksEventListeners() {
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', e => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href').substring(1);
+                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                    document.querySelectorAll('.content-section').forEach(s => s.classList.toggle('active', s.id === targetId));
+                    if (targetId === 'kelola-user') {
+                        renderUserManagement();
+                    }
+                    filterAndRenderAll();
+                });
+            });
+        }
+        addNavLinksEventListeners(); // Initial call
+        
+        // --- Core Functions: UI & Logic (Sebagian besar sama, dengan modifikasi) ---
+
+        const populateMasterForm = (judul) => {
+            const masterData = productMasters[judul];
+            if (!masterData) {
+                masterGambarInput.value = '';
+                masterGambarPreview.src = '';
+                masterGambarPreview.style.display = 'none';
+                masterKondisiSelect.value = 'New';
+                masterRilisInput.value = '';
+                masterAsalInput.value = 'Jepang';
+                masterBrandInput.value = 'Bandai';
+                fiturCheckboxes.forEach(cb => cb.checked = true);
+                masterKeteranganInput.value = '';
+                return;
+            };
+            masterGambarInput.value = '';
+            masterGambarPreview.src = masterData.gambar || '';
+            masterGambarPreview.style.display = masterData.gambar ? 'block' : 'none';
+            masterKondisiSelect.value = masterData.kondisi || 'New';
+            masterRilisInput.value = masterData.rilis || '';
+            masterAsalInput.value = masterData.asal || '';
+            masterBrandInput.value = masterData.brand || '';
+            masterKeteranganInput.value = masterData.keterangan || '';
+            fiturCheckboxes.forEach(cb => {
+                cb.checked = (masterData.fitur || []).includes(cb.value);
+            });
+        };
+        
+        const updateAllSuggestions = () => {
+            const titles = Object.keys(productMasters);
+            const titleOptions = titles.map(t => `<option value="${t}"></option>`).join('');
+            masterJudulSuggestions.innerHTML = titleOptions;
+            judulPilihanSuggestions.innerHTML = titleOptions;
+            descJudulPilihanSuggestions.innerHTML = titleOptions;
+            
+            const uniqueBrands = [...new Set(Object.values(productMasters).map(m => m.brand).filter(Boolean))];
+            brandSuggestions.innerHTML = uniqueBrands.map(b => `<option value="${b}"></option>`).join('');
+
+            const uniqueBatches = [...new Set(products.map(p => p.batchTag).filter(Boolean))];
+            batchSuggestions.innerHTML = uniqueBatches.map(b => `<option value="${b}"></option>`).join('');
+        };
+
+        const handleImageUpload = async (fileInput, fileName) => {
+            const file = fileInput.files[0];
+            if (!file) return null;
+
+            if (file.size > 2 * 1024 * 1024) {
+                showNotification('Ukuran gambar terlalu besar (maks 2MB).', 'error');
+                return null;
+            }
+            
+            const { data, error } = await supabase.storage
+                .from('product-images')
+                .upload(fileName, file, {
+                    cacheControl: '3600',
+                    upsert: true, 
+                });
+
+            if (error) {
+                showNotification(`Gagal unggah gambar: ${error.message}`, 'error');
+                return null;
+            }
+            
+            const { data: { publicUrl } } = supabase.storage.from('product-images').getPublicUrl(fileName);
+            return publicUrl;
+        };
+
+        const generateKode = (masterId, variantName) => {
+            const uniqueId = masterId.substring(0, 4);
+            return `${uniqueId}-${variantName.trim()}`;
+        }
+        
+        const updateCounts = () => {
+            const totalVariants = products.length;
+            const displayedVariants = productListContainer.querySelectorAll('.variant-item').length;
+            const selectedVariants = productListContainer.querySelectorAll('.variant-checkbox:checked').length;
+            productCounts.innerHTML = `Total Varian: <strong>${totalVariants}</strong> | Ditampilkan: <strong>${displayedVariants}</strong> | Dipilih: <strong>${selectedVariants}</strong>`;
+        };
+        
+        const getFilteredAndSortedProducts = () => {
+            let productsToRender = [...products];
+            const searchTerm = searchInput.value.toLowerCase();
+            const selectedBatch = batchFilter.value;
+            const sortOrder = sortFilter.value;
+
+            productsToRender.sort((a, b) => {
+                const dateA = new Date(a.lastModified).getTime();
+                const dateB = new Date(b.lastModified).getTime();
+                return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+            });
+
+            if (selectedBatch) {
+                productsToRender = productsToRender.filter(p => p.batchTag === selectedBatch);
+            }
+
+            if (searchTerm) {
+                productsToRender = productsToRender.filter(p => 
+                    (p.judul.toLowerCase().includes(searchTerm)) ||
+                    (p.variant.toLowerCase().includes(searchTerm)) ||
+                    (p.kode && p.kode.toLowerCase().includes(searchTerm)) ||
+                    (p.batchTag && p.batchTag.toLowerCase().includes(searchTerm))
+                );
+            }
+            return productsToRender;
+        };
+        
+        function renderLowStockSection() {
+            // This function would need its data to be loaded correctly from Supabase
+            lowStockListEl.innerHTML = '<li>Fitur ini sedang dalam pengembangan untuk versi Supabase.</li>';
+        }
+        
+        const renderDashboard = () => {
+            // Dashboard data needs to be aggregated from Supabase, which is a more complex query.
+            // For now, we'll show basic counts.
+            totalMasterProductsEl.textContent = Object.keys(productMasters).length;
+            totalUniqueVariantsEl.textContent = products.length;
+            totalStockItemsEl.textContent = products.reduce((sum, p) => sum + (p.stok || 0), 0);
+            totalItemsSoldEl.textContent = 'N/A';
+            totalRevenueEl.textContent = 'Rp N/A';
+            
+            renderLowStockSection();
+        };
+
+        const renderProductList = () => {
+            const filteredProducts = getFilteredAndSortedProducts();
+            const groupedByBatch = filteredProducts.reduce((acc, p) => {
+                const batchKey = p.batchTag || 'Tanpa Batch';
+                if (!acc[batchKey]) acc[batchKey] = {};
+                if (!acc[batchKey][p.judul]) acc[batchKey][p.judul] = [];
+                acc[batchKey][p.judul].push(p);
+                return acc;
+            }, {});
+            
+            productListContainer.innerHTML = '';
+
+            Object.keys(groupedByBatch).forEach(batch => {
+                const batchContainer = document.createElement('div');
+                batchContainer.innerHTML = `<h2 class="batch-header">Batch: ${batch}</h2>`;
+                
+                const productsInBatch = groupedByBatch[batch];
+                for (const judul in productsInBatch) {
+                     const master = productMasters[judul] || {};
+                    const variants = productsInBatch[judul];
+                    const groupCard = document.createElement('div');
+                    groupCard.className = 'product-group-card';
+                    
+                    let variantsHTML = '';
+                    variants.forEach(v => {
+                        const lowStockClass = (v.stok <= (v.batasMinimum || 0)) ? 'low-stock' : '';
+                        let priceHTML = `<div class="price-display"><strong>${new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(v.hargaNormal || 0)}</strong></div>`;
+                        if (v.hargaDiskon > 0 && v.hargaDiskon < v.hargaNormal) {
+                            const diskon = Math.round(((v.hargaNormal - v.hargaDiskon) / v.hargaNormal) * 100);
+                            priceHTML = `<div class="price-display"><span class="price-diskon">${new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(v.hargaDiskon)}</span><span class="price-normal">${new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(v.hargaNormal)}</span><span class="diskon-badge">${diskon}%</span></div>`;
+                        }
+
+                        variantsHTML += `
+                            <li class="variant-item ${lowStockClass}" data-uuid="${v.uuid}">
+                                <img src="${v.gambar || 'https://placehold.co/40x40/e0e0e0/555?text=...'}" class="variant-image image-preview-trigger" data-img-src="${v.gambar || ''}">
+                                <div class="variant-details">
+                                    <p><strong>${v.variant}</strong></p>
+                                    ${priceHTML}
+                                    <p>Stok: ${v.stok} | Lokasi: ${v.lokasi || '-'}</p>
+                                    <p style="font-size: 0.8em; color: #6c757d;">Kode: ${v.kode || 'N/A'}</p>
+                                </div>
+                                <div class="variant-actions">
+                                    <button class="action-btn history-btn">Riwayat</button>
+                                    <button class="action-btn edit-btn">Edit</button>
+                                    <button class="action-btn delete-btn">Hapus</button>
+                                    <input type="checkbox" class="variant-checkbox">
+                                </div>
+                            </li>
+                        `;
+                    });
+
+                    groupCard.innerHTML = `
+                        <div class="group-header">
+                            <img src="${master.gambar || 'https://placehold.co/60x60/e0e0e0/555?text=NoImg'}" class="group-image image-preview-trigger" data-img-src="${master.gambar || ''}">
+                            <div class="group-title">${judul}</div>
+                            <span class="group-toggle-icon">&#9654;</span>
+                            <button class="action-btn quick-add-btn" data-judul="${judul}">+</button>
+                            <button class="action-btn delete-btn group-delete-btn" data-judul="${judul}">Hapus Grup</button>
+                            <input type="checkbox" class="group-checkbox">
+                        </div>
+                        <ul class="variant-list">${variantsHTML}</ul>
+                    `;
+                    batchContainer.appendChild(groupCard)
+                }
+                productListContainer.appendChild(batchContainer);
+            });
+            updateCounts();
+        };
+
+        window.filterAndRenderAll = () => {
+            const activeSectionId = document.querySelector('.content-section.active')?.id;
+            if (!activeSectionId) return;
+
+            if (activeSectionId === 'dashboard') {
+                renderDashboard();
+            } else if (activeSectionId === 'data-list') {
+                renderProductList();
+            }
+            updateAllSuggestions();
+        };
+
+        // --- Event Listeners ---
+        [searchInput, batchFilter, sortFilter].forEach(el => el.addEventListener('input', filterAndRenderAll));
+        
+        // --- ADMIN: User Management ---
+        async function renderUserManagement() {
+            if (!currentUserProfile || currentUserProfile.role !== 'admin') {
+                userListBody.innerHTML = '<tr><td colspan="3">Anda tidak punya akses.</td></tr>';
+                return;
+            }
+
+            const { data: profiles, error } = await supabase.from('profiles').select('id, email, role');
+            if (error) {
+                userListBody.innerHTML = `<tr><td colspan="3">Error: ${error.message}</td></tr>`;
+                return;
+            }
+
+            userListBody.innerHTML = profiles.map(profile => `
+                <tr data-user-id="${profile.id}">
+                    <td>${profile.email}</td>
+                    <td>
+                        <select class="user-role-select" ${profile.id === currentUserProfile.id ? 'disabled' : ''}>
+                            <option value="user" ${profile.role === 'user' ? 'selected' : ''}>User</option>
+                            <option value="admin" ${profile.role === 'admin' ? 'selected' : ''}>Admin</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button class="action-btn edit-btn save-role-btn" data-user-id="${profile.id}">Simpan Role</button>
+                        ${profile.id !== currentUserProfile.id ? `<button class="action-btn delete-btn delete-user-btn" data-user-id="${profile.id}">Hapus User</button>` : ''}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        userListBody.addEventListener('click', async (e) => {
+            const target = e.target;
+            const userId = target.dataset.userId;
+
+            if (target.classList.contains('save-role-btn')) {
+                const newRole = document.querySelector(`tr[data-user-id="${userId}"] .user-role-select`).value;
+                if(confirm(`Yakin ingin mengubah role user ${userId} menjadi ${newRole}?`)) {
+                    const { error } = await supabase.from('profiles').update({ role: newRole }).eq('id', userId);
+                    if (error) {
+                        showNotification(`Gagal update role: ${error.message}`, 'error');
+                    } else {
+                        showNotification('Role berhasil diupdate!', 'success');
+                        renderUserManagement();
+                    }
+                }
+            }
+
+            if (target.classList.contains('delete-user-btn')) {
+                 showNotification('Fitur hapus user memerlukan Supabase Edge Function (backend) untuk keamanan dan belum diimplementasikan di kode ini.', 'info');
+                 // Implementasi aman memerlukan pemanggilan Edge Function
+            }
+        });
+
+
+        // MENU 1: MASTER PRODUK
+        saveMasterBtn.addEventListener('click', async () => {
+            const judul = masterJudulInput.value.trim();
+            if (!judul) { showNotification('Judul produk tidak boleh kosong.', 'error'); return; }
+
+            const selectedFeatures = fiturCheckboxes.filter(cb => cb.checked).map(cb => cb.value);
+            
+            const imageName = `master-${Date.now()}`;
+            const imageUrl = await handleImageUpload(masterGambarInput, imageName);
+
+            const masterPayload = {
+                title: judul,
+                condition: masterKondisiSelect.value,
+                release_month: masterRilisInput.value || null,
+                origin: masterAsalInput.value,
+                brand: masterBrandInput.value,
+                features: selectedFeatures,
+                description: masterKeteranganInput.value.trim(),
+                main_image_url: imageUrl || productMasters[judul]?.gambar
+            };
+
+            const { data, error } = await supabase.from('product_masters').upsert(masterPayload, { onConflict: 'title' }).select().single();
+            
+            if (error) {
+                showNotification(`Gagal simpan master: ${error.message}`, 'error');
+            } else {
+                showNotification(`Master produk "${judul}" berhasil disimpan!`);
+                await loadAllDataFromSupabase();
+                filterAndRenderAll();
+                masterJudulInput.value = '';
+                populateMasterForm('');
+            }
+        });
+        
+        // ... (Fungsi dan event listener lain dari kode lama bisa ditambahkan di sini dengan modifikasi serupa)
+
+        masterJudulInput.addEventListener('input', () => {
+            populateMasterForm(masterJudulInput.value);
+        });
+        
+        // Final Setup
+        document.querySelector('.nav-links a[href="#dashboard"]').click();
+    });
+    </script>
+</body>
+</html>
