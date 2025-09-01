@@ -847,6 +847,164 @@
             }, 3000);
         }
         
+        // --- Supabase Client & Configuration ---
+        const supabaseUrl = 'https://gscvuwzqdywkbmyhohju.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzY3Z1d3pxZHl3a2JteWhvaGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY3Mzc5NjgsImV4cCI6MjA3MjMxMzk2OH0.0TNw27sUI4BerA8qog9uPghdjjvcJ9wAgXIT79dkG7E';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // --- Data Stores (Supabase-driven now) ---
+        let products = [];
+        let productMasters = {};
+
+        // --- State Variables ---
+        let lowStockCurrentPage = 1;
+        const lowStockItemsPerPage = 5;
+
+        // --- Element Selectors ---
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.content-section');
+        
+        // Dashboard
+        const totalMasterProductsEl = document.getElementById('total-master-products');
+        const totalUniqueVariantsEl = document.getElementById('total-unique-variants');
+        const totalStockItemsEl = document.getElementById('total-stock-items');
+        const totalItemsSoldEl = document.getElementById('total-items-sold');
+        const totalRevenueEl = document.getElementById('total-revenue');
+        const lowStockListEl = document.getElementById('low-stock-list');
+        const soldItemsCard = document.getElementById('sold-items-card');
+        const masterProductsCard = document.getElementById('master-products-card');
+        const lowStockBatchFilter = document.getElementById('low-stock-batch-filter');
+        const lowStockBatchSuggestions = document.getElementById('low-stock-batch-suggestions');
+        const lowStockPaginationContainer = document.getElementById('low-stock-pagination-container');
+
+        // Section 1
+        const masterJudulInput = document.getElementById('master-judul');
+        const masterJudulSuggestions = document.getElementById('master-judul-suggestions');
+        const masterGambarInput = document.getElementById('master-gambar');
+        const masterGambarPreview = document.getElementById('master-gambar-preview');
+        const masterKondisiSelect = document.getElementById('master-kondisi');
+        const masterRilisInput = document.getElementById('master-rilis');
+        const masterAsalInput = document.getElementById('master-asal');
+        const masterBrandInput = document.getElementById('master-brand');
+        const brandSuggestions = document.getElementById('brand-suggestions');
+        const fiturCheckboxes = Array.from(document.querySelectorAll('[id^="fitur-"]'));
+        const masterKeteranganInput = document.getElementById('master-keterangan');
+        const saveMasterBtn = document.getElementById('save-master-btn');
+        const duplicateMasterBtn = document.getElementById('duplicate-master-btn');
+        const deleteMasterBtn = document.getElementById('delete-master-btn');
+
+        // Section 2
+        const judulPilihanInput = document.getElementById('judul-pilihan');
+        const judulPilihanSuggestions = document.getElementById('judul-pilihan-suggestions');
+        const totalVariantInput = document.getElementById('total-variant');
+        const batchMonthPicker = document.getElementById('batch-month-picker');
+        const batchTagInput = document.getElementById('batch-tag');
+        const batchSuggestions = document.getElementById('batch-suggestions');
+        const variantInputsContainer = document.getElementById('variant-inputs-container');
+        const submitVariantsBtn = document.getElementById('submit-variants-btn');
+        const productListContainer = document.getElementById('product-list-container');
+        const searchInput = document.getElementById('search-input');
+        const batchFilter = document.getElementById('batch-filter');
+        const sortFilter = document.getElementById('sort-filter');
+        const selectAllFilteredCheckbox = document.getElementById('select-all-filtered');
+        const productCounts = document.getElementById('product-counts');
+        const printPdfBtn = document.getElementById('print-pdf-btn');
+        const printThermalBtn = document.getElementById('print-thermal-btn');
+        const downloadImagesBtn = document.getElementById('download-images-btn');
+        const bulkHargaNormalInput = document.getElementById('bulk-harga-normal');
+        const bulkHargaDiskonInput = document.getElementById('bulk-harga-diskon');
+        const bulkStokInput = document.getElementById('bulk-stok');
+        
+        // Section 3
+        const descJudulPilihanInput = document.getElementById('desc-judul-pilihan');
+        const descJudulPilihanSuggestions = document.getElementById('desc-judul-pilihan-suggestions');
+        const generatedDescriptionTextarea = document.getElementById('generated-description');
+        const copyDescriptionBtn = document.getElementById('copy-description-btn');
+        
+        // Modals & Popups
+        const imagePopup = document.getElementById('image-popup');
+        const popupImg = document.getElementById('popup-img');
+        const imagePopupClose = document.getElementById('image-popup-close');
+        
+        const editModal = document.getElementById('edit-modal');
+        const editModalClose = document.getElementById('edit-modal-close');
+        const editUuidInput = document.getElementById('edit-uuid');
+        const editVariantNameInput = document.getElementById('edit-variant-name');
+        const editHargaNormalInput = document.getElementById('edit-harga-normal');
+        const editHargaDiskonInput = document.getElementById('edit-harga-diskon');
+        const editStokInput = document.getElementById('edit-stok');
+        const editStokNoteSelect = document.getElementById('edit-stok-note-select');
+        const editStokNoteOtherContainer = document.getElementById('edit-stok-note-other-container');
+        const editStokNoteOtherInput = document.getElementById('edit-stok-note-other');
+        const editBatchInput = document.getElementById('edit-batch');
+        const editLokasiInput = document.getElementById('edit-lokasi');
+        const editBatasMinimumInput = document.getElementById('edit-batas-minimum');
+        const editGambarVariantInput = document.getElementById('edit-gambar-variant');
+        const editGambarPreview = document.getElementById('edit-gambar-preview');
+        const saveEditBtn = document.getElementById('save-edit-btn');
+        
+        const quickAddModal = document.getElementById('quick-add-modal');
+        const quickAddModalClose = document.getElementById('quick-add-modal-close');
+        const quickAddTitle = document.getElementById('quick-add-title');
+        const quickAddJudulInput = document.getElementById('quick-add-judul');
+        const quickAddVariantNameInput = document.getElementById('quick-add-variant-name');
+        const quickAddVariantSuggestions = document.getElementById('quick-add-variant-suggestions');
+        const quickAddStokInput = document.getElementById('quick-add-stok');
+        const quickAddBatchInput = document.getElementById('quick-add-batch');
+        const quickAddHargaNormalInput = document.getElementById('quick-add-harga-normal');
+        const quickAddHargaDiskonInput = document.getElementById('quick-add-harga-diskon');
+        const quickAddGambarInput = document.getElementById('quick-add-gambar');
+        const quickAddSaveBtn = document.getElementById('quick-add-save-btn');
+
+        const historyModal = document.getElementById('history-modal');
+        const historyModalClose = document.getElementById('history-modal-close');
+        const historyModalTitle = document.getElementById('history-modal-title');
+        const historyModalList = document.getElementById('history-modal-list');
+
+        const soldItemsModal = document.getElementById('sold-items-modal');
+        const soldItemsModalClose = document.getElementById('sold-items-modal-close');
+        const soldItemsModalList = document.getElementById('sold-items-modal-list');
+        const soldStartDateInput = document.getElementById('sold-start-date');
+        const soldEndDateInput = document.getElementById('sold-end-date');
+        const soldItemsTotalsEl = document.getElementById('sold-items-totals');
+
+        const masterReportModal = document.getElementById('master-report-modal');
+        const masterReportModalClose = document.getElementById('master-report-modal-close');
+        const masterReportModalList = document.getElementById('master-report-modal-list');
+        const masterReportSort = document.getElementById('master-report-sort');
+        const masterReportRilisStart = document.getElementById('master-report-rilis-start');
+        const masterReportRilisEnd = document.getElementById('master-report-rilis-end');
+        
+        const pdfOptionsModal = document.getElementById('pdf-options-modal');
+        const pdfOptionsModalClose = document.getElementById('pdf-options-modal-close');
+        const generatePdfBtn = document.getElementById('generate-pdf-btn');
+
+        const downloadImagesModal = document.getElementById('download-images-modal');
+        const downloadImagesModalClose = document.getElementById('download-images-modal-close');
+        const downloadLinksList = document.getElementById('download-links-list');
+        
+        // --- Notification System ---
+        const notificationContainer = document.createElement('div');
+        notificationContainer.id = 'notification-container';
+        document.body.appendChild(notificationContainer);
+
+        function showNotification(message, type = 'success') {
+            const notif = document.createElement('div');
+            notif.className = `notification ${type}`;
+            notif.textContent = message;
+
+            notificationContainer.appendChild(notif);
+            
+            setTimeout(() => {
+                notif.classList.add('show');
+            }, 10);
+
+            setTimeout(() => {
+                notif.classList.remove('show');
+                notif.addEventListener('transitionend', () => notif.remove());
+            }, 3000);
+        }
+        
         // --- Core Functions ---
         // Function to upload image to Supabase Storage and get public URL
         async function uploadImageAndGetUrl(file) {
@@ -1163,6 +1321,17 @@
         });
 
         // MENU 1: MASTER PRODUK
+        masterJudulInput.addEventListener('input', () => {
+            populateMasterForm(masterJudulInput.value);
+        });
+
+        masterGambarInput.addEventListener('change', () => {
+            if(masterGambarInput.files[0]) {
+                 masterGambarPreview.src = URL.createObjectURL(masterGambarInput.files[0]);
+                 masterGambarPreview.style.display = 'block';
+            }
+        });
+
         saveMasterBtn.addEventListener('click', async () => {
             const judul = masterJudulInput.value.trim();
             if (!judul) {
@@ -1269,17 +1438,6 @@
             masterJudulInput.placeholder = "Masukkan judul baru untuk duplikat...";
             masterJudulInput.focus();
             showNotification("Data telah diduplikasi. Masukkan judul baru lalu simpan.", 'info');
-        });
-
-        masterJudulInput.addEventListener('input', () => {
-            populateMasterForm(masterJudulInput.value);
-        });
-
-        masterGambarInput.addEventListener('change', () => {
-            if(masterGambarInput.files[0]) {
-                 masterGambarPreview.src = URL.createObjectURL(masterGambarInput.files[0]);
-                 masterGambarPreview.style.display = 'block';
-            }
         });
 
         // MENU 2: INPUT VARIAN
