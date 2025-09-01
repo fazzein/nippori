@@ -41,7 +41,6 @@
             flex-shrink: 0;
             display: flex;
             flex-direction: column;
-            display: none; /* Hidden by default for login page */
         }
         .nav-header {
             font-size: 1.5em;
@@ -71,7 +70,6 @@
             flex-grow: 1;
             padding: 30px;
             max-width: calc(100% - 280px);
-            display: none; /* Hidden by default for login page */
         }
         .content-section { display: none; }
         .content-section.active { display: block; }
@@ -338,60 +336,9 @@
         .notification.success { background-color: var(--success); }
         .notification.error { background-color: var(--nippori-red); }
         .notification.info { background-color: var(--nippori-blue); }
-        
-        /* Login Page Styles */
-        #login-section {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 100vw;
-            height: 100vh;
-            background-color: var(--nippori-blue);
-            
-        }
-        #login-card {
-            background-color: #ffffff;
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-        }
-        #login-card h1 {
-            border-bottom: none;
-            color: var(--nippori-blue);
-            margin-bottom: 20px;
-        }
-        #login-card input {
-            text-align: center;
-        }
-        #login-card button {
-            width: 100%;
-        }
-        #login-error {
-            color: var(--nippori-red);
-            font-weight: bold;
-            margin-top: 10px;
-            display: none;
-        }
     </style>
 </head>
 <body>
-    
-    <section id="login-section" class="content-section active">
-        <div id="login-card" class="card">
-            <h1>Nippori Sistem</h1>
-            <p>Masukkan kode akses untuk masuk.</p>
-            <div class="form-group">
-                <input type="password" id="access-code-input" placeholder="Kode Akses">
-                <div id="login-error"></div>
-            </div>
-            <button id="login-btn">Masuk</button>
-        </div>
-    </section>
-
     <nav class="main-nav">
         <div class="nav-header">Nippori Sistem</div>
         <ul class="nav-links">
@@ -399,7 +346,6 @@
             <li><a href="#produk" class="nav-link">Produk</a></li>
             <li><a href="#data-list" class="nav-link">Data List</a></li>
             <li><a href="#deskripsi" class="nav-link">Deskripsi Detail</a></li>
-            <li><button id="logout-btn" style="background-color: transparent; border: 1px solid var(--nippori-red); color: var(--nippori-red); font-weight: 600;">Keluar</button></li>
         </ul>
     </nav>
 
@@ -559,11 +505,7 @@
                             <button id="print-thermal-btn">Cetak Label Thermal</button>
                         </div>
                         <div class="actions-container">
-                             <button id="export-btn-today">Ekspor Perubahan Hari Ini</button>
-                             <button id="export-btn-all">Ekspor Semua Data</button>
-                             <button id="import-btn">Impor Data</button>
                              <button id="download-images-btn">Unduh Gambar</button>
-                             <input type="file" id="import-file-input" accept=".json" style="display:none;">
                         </div>
                     </div>
                 </div>
@@ -777,7 +719,6 @@
         // --- State Variables ---
         let lowStockCurrentPage = 1;
         const lowStockItemsPerPage = 5;
-        const ACCESS_CODE = 'nipporijapan';
 
         // --- Element Selectors ---
         const navLinks = document.querySelectorAll('.nav-link');
@@ -785,13 +726,6 @@
         const mainNav = document.querySelector('.main-nav');
         const mainContent = document.querySelector('.main-content');
         
-        // Login Page
-        const loginSection = document.getElementById('login-section');
-        const accessCodeInput = document.getElementById('access-code-input');
-        const loginBtn = document.getElementById('login-btn');
-        const loginErrorEl = document.getElementById('login-error');
-        const logoutBtn = document.getElementById('logout-btn');
-
         // Dashboard
         const totalMasterProductsEl = document.getElementById('total-master-products');
         const totalUniqueVariantsEl = document.getElementById('total-unique-variants');
@@ -838,10 +772,6 @@
         const productCounts = document.getElementById('product-counts');
         const printPdfBtn = document.getElementById('print-pdf-btn');
         const printThermalBtn = document.getElementById('print-thermal-btn');
-        const exportBtnAll = document.getElementById('export-btn-all');
-        const exportBtnToday = document.getElementById('export-btn-today');
-        const importBtn = document.getElementById('import-btn');
-        const importFileInput = document.getElementById('import-file-input');
         const downloadImagesBtn = document.getElementById('download-images-btn');
         const bulkHargaNormalInput = document.getElementById('bulk-harga-normal');
         const bulkHargaDiskonInput = document.getElementById('bulk-harga-diskon');
@@ -937,54 +867,166 @@
             }, 3000);
         }
         
-        // --- AUTHENTICATION LOGIC ---
-        const checkAuth = () => {
-            if (sessionStorage.getItem('isAuthenticated') === 'true') {
-                showApp();
-            } else {
-                showLogin();
-            }
-        };
+        // --- Supabase Client & Configuration ---
+        const supabaseUrl = 'https://gscvuwzqdywkbmyhohju.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzY3Z1d3pxZHl3a2JteWhvaGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY3Mzc5NjgsImV4cCI6MjA3MjMxMzk2OH0.0TNw27sUI4BerA8qog9uPghdjjvcJ9wAgXIT79dkG7E';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-        const showLogin = () => {
-            loginSection.style.display = 'flex';
-            mainNav.style.display = 'none';
-            mainContent.style.display = 'none';
-        };
+        // --- Data Stores (Supabase-driven now) ---
+        let products = [];
+        let productMasters = {};
 
-        const showApp = async () => {
-            loginSection.style.display = 'none';
-            mainNav.style.display = 'flex';
-            mainContent.style.display = 'block';
-            showNotification('Login berhasil!', 'success');
-            await fetchAllData();
-            document.querySelector('.nav-links a[href="#dashboard"]').click();
-        };
+        // --- State Variables ---
+        let lowStockCurrentPage = 1;
+        const lowStockItemsPerPage = 5;
 
-        loginBtn.addEventListener('click', () => {
-            const code = accessCodeInput.value.trim();
-            if (code === ACCESS_CODE) {
-                sessionStorage.setItem('isAuthenticated', 'true');
-                showApp();
-            } else {
-                loginErrorEl.textContent = 'Kode akses salah. Coba lagi.';
-                loginErrorEl.style.display = 'block';
-                showNotification('Kode akses salah.', 'error');
-            }
-        });
-
-        accessCodeInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                loginBtn.click();
-            }
-        });
+        // --- Element Selectors ---
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.content-section');
+        const mainNav = document.querySelector('.main-nav');
+        const mainContent = document.querySelector('.main-content');
         
-        logoutBtn.addEventListener('click', () => {
-            sessionStorage.removeItem('isAuthenticated');
-            showLogin();
-            showNotification('Anda telah keluar.', 'info');
-        });
+        // Dashboard
+        const totalMasterProductsEl = document.getElementById('total-master-products');
+        const totalUniqueVariantsEl = document.getElementById('total-unique-variants');
+        const totalStockItemsEl = document.getElementById('total-stock-items');
+        const totalItemsSoldEl = document.getElementById('total-items-sold');
+        const totalRevenueEl = document.getElementById('total-revenue');
+        const lowStockListEl = document.getElementById('low-stock-list');
+        const soldItemsCard = document.getElementById('sold-items-card');
+        const masterProductsCard = document.getElementById('master-products-card');
+        const lowStockBatchFilter = document.getElementById('low-stock-batch-filter');
+        const lowStockBatchSuggestions = document.getElementById('low-stock-batch-suggestions');
+        const lowStockPaginationContainer = document.getElementById('low-stock-pagination-container');
 
+        // Section 1
+        const masterJudulInput = document.getElementById('master-judul');
+        const masterJudulSuggestions = document.getElementById('master-judul-suggestions');
+        const masterGambarInput = document.getElementById('master-gambar');
+        const masterGambarPreview = document.getElementById('master-gambar-preview');
+        const masterKondisiSelect = document.getElementById('master-kondisi');
+        const masterRilisInput = document.getElementById('master-rilis');
+        const masterAsalInput = document.getElementById('master-asal');
+        const masterBrandInput = document.getElementById('master-brand');
+        const brandSuggestions = document.getElementById('brand-suggestions');
+        const fiturCheckboxes = Array.from(document.querySelectorAll('[id^="fitur-"]'));
+        const masterKeteranganInput = document.getElementById('master-keterangan');
+        const saveMasterBtn = document.getElementById('save-master-btn');
+        const duplicateMasterBtn = document.getElementById('duplicate-master-btn');
+        const deleteMasterBtn = document.getElementById('delete-master-btn');
+
+        // Section 2
+        const judulPilihanInput = document.getElementById('judul-pilihan');
+        const judulPilihanSuggestions = document.getElementById('judul-pilihan-suggestions');
+        const totalVariantInput = document.getElementById('total-variant');
+        const batchMonthPicker = document.getElementById('batch-month-picker');
+        const batchTagInput = document.getElementById('batch-tag');
+        const batchSuggestions = document.getElementById('batch-suggestions');
+        const variantInputsContainer = document.getElementById('variant-inputs-container');
+        const submitVariantsBtn = document.getElementById('submit-variants-btn');
+        const productListContainer = document.getElementById('product-list-container');
+        const searchInput = document.getElementById('search-input');
+        const batchFilter = document.getElementById('batch-filter');
+        const sortFilter = document.getElementById('sort-filter');
+        const selectAllFilteredCheckbox = document.getElementById('select-all-filtered');
+        const productCounts = document.getElementById('product-counts');
+        const printPdfBtn = document.getElementById('print-pdf-btn');
+        const printThermalBtn = document.getElementById('print-thermal-btn');
+        const downloadImagesBtn = document.getElementById('download-images-btn');
+        const bulkHargaNormalInput = document.getElementById('bulk-harga-normal');
+        const bulkHargaDiskonInput = document.getElementById('bulk-harga-diskon');
+        const bulkStokInput = document.getElementById('bulk-stok');
+        
+        // Section 3
+        const descJudulPilihanInput = document.getElementById('desc-judul-pilihan');
+        const descJudulPilihanSuggestions = document.getElementById('desc-judul-pilihan-suggestions');
+        const generatedDescriptionTextarea = document.getElementById('generated-description');
+        const copyDescriptionBtn = document.getElementById('copy-description-btn');
+        
+        // Modals & Popups
+        const imagePopup = document.getElementById('image-popup');
+        const popupImg = document.getElementById('popup-img');
+        const imagePopupClose = document.getElementById('image-popup-close');
+        
+        const editModal = document.getElementById('edit-modal');
+        const editModalClose = document.getElementById('edit-modal-close');
+        const editUuidInput = document.getElementById('edit-uuid');
+        const editVariantNameInput = document.getElementById('edit-variant-name');
+        const editHargaNormalInput = document.getElementById('edit-harga-normal');
+        const editHargaDiskonInput = document.getElementById('edit-harga-diskon');
+        const editStokInput = document.getElementById('edit-stok');
+        const editStokNoteSelect = document.getElementById('edit-stok-note-select');
+        const editStokNoteOtherContainer = document.getElementById('edit-stok-note-other-container');
+        const editStokNoteOtherInput = document.getElementById('edit-stok-note-other');
+        const editBatchInput = document.getElementById('edit-batch');
+        const editLokasiInput = document.getElementById('edit-lokasi');
+        const editBatasMinimumInput = document.getElementById('edit-batas-minimum');
+        const editGambarVariantInput = document.getElementById('edit-gambar-variant');
+        const editGambarPreview = document.getElementById('edit-gambar-preview');
+        const saveEditBtn = document.getElementById('save-edit-btn');
+        
+        const quickAddModal = document.getElementById('quick-add-modal');
+        const quickAddModalClose = document.getElementById('quick-add-modal-close');
+        const quickAddTitle = document.getElementById('quick-add-title');
+        const quickAddJudulInput = document.getElementById('quick-add-judul');
+        const quickAddVariantNameInput = document.getElementById('quick-add-variant-name');
+        const quickAddVariantSuggestions = document.getElementById('quick-add-variant-suggestions');
+        const quickAddStokInput = document.getElementById('quick-add-stok');
+        const quickAddBatchInput = document.getElementById('quick-add-batch');
+        const quickAddHargaNormalInput = document.getElementById('quick-add-harga-normal');
+        const quickAddHargaDiskonInput = document.getElementById('quick-add-harga-diskon');
+        const quickAddGambarInput = document.getElementById('quick-add-gambar');
+        const quickAddSaveBtn = document.getElementById('quick-add-save-btn');
+
+        const historyModal = document.getElementById('history-modal');
+        const historyModalClose = document.getElementById('history-modal-close');
+        const historyModalTitle = document.getElementById('history-modal-title');
+        const historyModalList = document.getElementById('history-modal-list');
+
+        const soldItemsModal = document.getElementById('sold-items-modal');
+        const soldItemsModalClose = document.getElementById('sold-items-modal-close');
+        const soldItemsModalList = document.getElementById('sold-items-modal-list');
+        const soldStartDateInput = document.getElementById('sold-start-date');
+        const soldEndDateInput = document.getElementById('sold-end-date');
+        const soldItemsTotalsEl = document.getElementById('sold-items-totals');
+
+        const masterReportModal = document.getElementById('master-report-modal');
+        const masterReportModalClose = document.getElementById('master-report-modal-close');
+        const masterReportModalList = document.getElementById('master-report-modal-list');
+        const masterReportSort = document.getElementById('master-report-sort');
+        const masterReportRilisStart = document.getElementById('master-report-rilis-start');
+        const masterReportRilisEnd = document.getElementById('master-report-rilis-end');
+        
+        const pdfOptionsModal = document.getElementById('pdf-options-modal');
+        const pdfOptionsModalClose = document.getElementById('pdf-options-modal-close');
+        const generatePdfBtn = document.getElementById('generate-pdf-btn');
+
+        const downloadImagesModal = document.getElementById('download-images-modal');
+        const downloadImagesModalClose = document.getElementById('download-images-modal-close');
+        const downloadLinksList = document.getElementById('download-links-list');
+        
+        // --- Notification System ---
+        const notificationContainer = document.createElement('div');
+        notificationContainer.id = 'notification-container';
+        document.body.appendChild(notificationContainer);
+
+        function showNotification(message, type = 'success') {
+            const notif = document.createElement('div');
+            notif.className = `notification ${type}`;
+            notif.textContent = message;
+
+            notificationContainer.appendChild(notif);
+            
+            setTimeout(() => {
+                notif.classList.add('show');
+            }, 10);
+
+            setTimeout(() => {
+                notif.classList.remove('show');
+                notif.addEventListener('transitionend', () => notif.remove());
+            }, 3000);
+        }
+        
         // --- Core Functions ---
         // Function to upload image to Supabase Storage and get public URL
         async function uploadImageAndGetUrl(file) {
@@ -1286,7 +1328,19 @@
         [searchInput, batchFilter, sortFilter].forEach(el => el.addEventListener('input', filterAndRenderAll));
         
         // --- Initial Check and Load ---
-        checkAuth();
+        fetchAllData();
+
+        // --- Navigation Logic ---
+        navLinks.forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                sections.forEach(s => s.classList.toggle('active', s.id === targetId));
+                filterAndRenderAll();
+            });
+        });
 
         // MENU 1: MASTER PRODUK
         saveMasterBtn.addEventListener('click', async () => {
@@ -1877,46 +1931,7 @@
         });
 
         // Print & Export
-        function exportData(data, fileName) {
-            const dataStr = JSON.stringify(data, null, 2);
-            const dataBlob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(dataBlob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = fileName;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        exportBtnAll.addEventListener('click', async () => {
-             const { data: allMasters } = await supabase.from('product_masters').select('*');
-             const { data: allVariants } = await supabase.from('variants').select('*');
-             exportData({ products: allVariants, productMasters: allMasters }, 'nippori-data-backup.json');
-        });
-        
-        exportBtnToday.addEventListener('click', async () => {
-            const todayStart = new Date().setHours(0, 0, 0, 0);
-            
-            const { data: changedVariants } = await supabase
-                .from('variants')
-                .select('*')
-                .gte('data->>lastModified', new Date(todayStart).toISOString());
-
-            const { data: changedMasters } = await supabase
-                .from('product_masters')
-                .select('*')
-                .gte('data->>lastModified', new Date(todayStart).toISOString());
-
-            if(changedVariants.length === 0 && changedMasters.length === 0) {
-                showNotification("Tidak ada perubahan data hari ini.", 'info');
-                return;
-            }
-            exportData({ products: changedVariants, productMasters: changedMasters }, `perubahan-${new Date().toISOString().slice(0,10)}.json`);
-        });
-
-        downloadImagesBtn.addEventListener('click', () => {
+        downloadImagesBtn.addEventListener('click', async () => {
             const selected = Array.from(productListContainer.querySelectorAll('.variant-checkbox:checked'));
             if (selected.length === 0) { showNotification('Pilih varian yang gambarnya ingin diunduh.', 'error'); return; }
 
@@ -1959,30 +1974,6 @@
             } else {
                 showNotification('Tidak ada gambar untuk diunduh pada produk yang dipilih.', 'info');
             }
-        });
-
-        importBtn.addEventListener('click', () => importFileInput.click());
-        importFileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                try {
-                    const data = JSON.parse(event.target.result);
-                    if (data.products && data.productMasters) {
-                        if (confirm('Yakin ingin menimpa semua data? Ini TIDAK AKAN MENGUNGGAH GAMBAR KE SUPABASE STORAGE.')) {
-                            // This is a complex operation and requires manual mapping of data for upsert
-                            // For simplicity, this client-side import is only for a full, local restore.
-                            showNotification('Impor manual tidak didukung saat ini, silakan gunakan fitur Ekspor untuk backup.', 'error');
-                        }
-                    } else {
-                        showNotification('Format file tidak valid.', 'error');
-                    }
-                } catch (err) {
-                    showNotification('Gagal membaca file.', 'error');
-                }
-            };
-            reader.readAsText(file);
         });
 
         printThermalBtn.addEventListener('click', () => {
