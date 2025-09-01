@@ -685,7 +685,7 @@
         // --- State Variables ---
         let products = [];
         let productMasters = {};
-
+        
         // --- Element Selectors ---
         const loginSection = document.getElementById('login-section');
         const mainAppContainer = document.getElementById('main-app');
@@ -1149,10 +1149,130 @@
             }
         });
 
+        // --- NEW CODE FOR VARIANT INPUTS ---
+        function generateVariantInputs() {
+            const total = parseInt(totalVariantInput.value);
+            const judul = judulPilihanInput.value.trim();
+            if (!judul) {
+                showNotification('Pilih Judul Produk terlebih dahulu.', 'error');
+                totalVariantInput.value = '';
+                return;
+            }
+            if (total < 1 || isNaN(total)) {
+                variantInputsContainer.innerHTML = '';
+                submitVariantsBtn.style.display = 'none';
+                return;
+            }
+            let html = '';
+            for (let i = 0; i < total; i++) {
+                html += `
+                    <div class="variant-input-group">
+                        <div style="display: flex; justify-content: space-between;">
+                            <h4>Varian #${i + 1}</h4>
+                            <button type="button" class="action-btn delete-btn" onclick="this.parentElement.parentElement.remove()">Hapus</button>
+                        </div>
+                        <div class="form-group"><label>Nama Varian:</label><input type="text" class="variant-name" required></div>
+                        <div class="price-group">
+                            <div class="form-group"><label>Harga Normal:</label><input type="number" class="variant-harga-normal" min="0" value="${bulkHargaNormalInput.value || ''}"></div>
+                            <div class="form-group"><label>Harga Diskon:</label><input type="number" class="variant-harga-diskon" min="0" value="${bulkHargaDiskonInput.value || ''}"></div>
+                        </div>
+                        <div class="form-group"><label>Stok:</label><input type="number" class="variant-stok" min="0" value="${bulkStokInput.value || ''}" required></div>
+                        <div class="form-group"><label>Lokasi Fisik (Opsional):</label><input type="text" class="variant-lokasi"></div>
+                        <div class="form-group"><label>Gambar Varian (Opsional):</label><input type="file" class="variant-gambar" accept="image/*"></div>
+                    </div>
+                `;
+            }
+            variantInputsContainer.innerHTML = html;
+            submitVariantsBtn.style.display = 'block';
+        }
+
+        async function submitVariants() {
+            const judul = judulPilihanInput.value.trim();
+            const masterId = productMasters[judul]?.id;
+            if (!masterId) {
+                showNotification('Judul produk tidak valid.', 'error');
+                return;
+            }
+
+            const batchTag = batchTagInput.value.trim() || `Batch-${new Date(batchMonthPicker.value).toLocaleString('id-ID', { month: 'short', year: 'numeric' })}`;
+            const variantGroups = document.querySelectorAll('.variant-input-group');
+            const variantsToInsert = [];
+            const imagesToUpload = [];
+
+            for (const group of variantGroups) {
+                const variantName = group.querySelector('.variant-name').value.trim();
+                const stok = parseInt(group.querySelector('.variant-stok').value);
+                const hargaNormal = parseFloat(group.querySelector('.variant-harga-normal').value);
+                const hargaDiskon = parseFloat(group.querySelector('.variant-harga-diskon').value);
+                const lokasi = group.querySelector('.variant-lokasi').value.trim();
+                const gambarFile = group.querySelector('.variant-gambar').files[0];
+
+                if (!variantName || isNaN(stok)) {
+                    showNotification('Nama varian dan stok harus diisi.', 'error');
+                    return;
+                }
+                
+                let imageUrl = null;
+                if (gambarFile) {
+                    const imageName = `${masterId}-${variantName}-${Date.now()}`;
+                    imagesToUpload.push({ file: gambarFile, name: imageName });
+                    imageUrl = supabase.storage.from('product-images').getPublicUrl(imageName).data.publicUrl;
+                }
+                
+                variantsToInsert.push({
+                    master_id: masterId,
+                    variant_name: variantName,
+                    stock: stok,
+                    normal_price: hargaNormal || 0,
+                    discount_price: hargaDiskon || 0,
+                    location: lokasi,
+                    batch_tag: batchTag,
+                    variant_image_url: imageUrl,
+                    product_code: `${masterId.substring(0, 4)}-${variantName.replace(/\s/g, '').toLowerCase()}`
+                });
+            }
+            
+            // Lakukan unggahan gambar terlebih dahulu
+            const uploadPromises = imagesToUpload.map(img =>
+                supabase.storage.from('product-images').upload(img.name, img.file)
+            );
+            await Promise.all(uploadPromises);
+
+            // Simpan varian ke database
+            const { error } = await supabase.from('product_variants').insert(variantsToInsert);
+
+            if (error) {
+                showNotification(`Gagal simpan varian: ${error.message}`, 'error');
+            } else {
+                showNotification(`Semua varian berhasil disimpan!`);
+                await loadAllDataFromSupabase();
+                filterAndRenderAll();
+                variantInputsContainer.innerHTML = '';
+                submitVariantsBtn.style.display = 'none';
+                judulPilihanInput.value = '';
+                totalVariantInput.value = '';
+            }
+        }
+        
+        // Event listener for Master Product input to populate form
         masterJudulInput.addEventListener('input', () => {
             populateMasterForm(masterJudulInput.value);
         });
-
+        
+        // Event listener untuk membuat form varian
+        totalVariantInput.addEventListener('input', generateVariantInputs);
+        bulkHargaNormalInput.addEventListener('input', () => {
+            document.querySelectorAll('.variant-harga-normal').forEach(input => input.value = bulkHargaNormalInput.value);
+        });
+        bulkHargaDiskonInput.addEventListener('input', () => {
+            document.querySelectorAll('.variant-harga-diskon').forEach(input => input.value = bulkHargaDiskonInput.value);
+        });
+        bulkStokInput.addEventListener('input', () => {
+            document.querySelectorAll('.variant-stok').forEach(input => input.value = bulkStokInput.value);
+        });
+        submitVariantsBtn.addEventListener('click', submitVariants);
+        
+        // General function to re-render the view
         window.filterAndRenderAll = () => {
             const activeSectionId = document.querySelector('.content-section.active')?.id;
             if (!activeSectionId) return;
@@ -1184,6 +1304,7 @@
 </body>
 
 </html>
+
 
 
 
