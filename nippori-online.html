@@ -695,9 +695,21 @@
     const navLinksList = document.getElementById('nav-links-list');
     const navLinks = document.querySelectorAll('.nav-link');
     const sections = document.querySelectorAll('.content-section');
+    
+    // Variabel untuk Dashboard
     const totalMasterProductsEl = document.getElementById('total-master-products');
     const totalUniqueVariantsEl = document.getElementById('total-unique-variants');
     const totalStockItemsEl = document.getElementById('total-stock-items');
+    const totalItemsSoldEl = document.getElementById('total-items-sold');
+    const totalRevenueEl = document.getElementById('total-revenue');
+    const lowStockListEl = document.getElementById('low-stock-list');
+    const lowStockBatchFilter = document.getElementById('low-stock-batch-filter');
+    const lowStockBatchSuggestions = document.getElementById('low-stock-batch-suggestions');
+    const lowStockPaginationContainer = document.getElementById('low-stock-pagination-container');
+    const soldItemsCard = document.getElementById('sold-items-card');
+    const masterProductsCard = document.getElementById('master-products-card');
+    
+    // Variabel untuk Produk
     const masterJudulInput = document.getElementById('master-judul');
     const masterJudulSuggestions = document.getElementById('master-judul-suggestions');
     const masterGambarInput = document.getElementById('master-gambar');
@@ -710,15 +722,93 @@
     const fiturCheckboxes = Array.from(document.querySelectorAll('[id^="fitur-"]'));
     const masterKeteranganInput = document.getElementById('master-keterangan');
     const saveMasterBtn = document.getElementById('save-master-btn');
+    const duplicateMasterBtn = document.getElementById('duplicate-master-btn');
+    const deleteMasterBtn = document.getElementById('delete-master-btn');
+    
+    // Variabel untuk Data List
+    const judulPilihanInput = document.getElementById('judul-pilihan');
     const judulPilihanSuggestions = document.getElementById('judul-pilihan-suggestions');
-    const descJudulPilihanSuggestions = document.getElementById('desc-judul-pilihan-suggestions');
+    const totalVariantInput = document.getElementById('total-variant');
+    const batchMonthPicker = document.getElementById('batch-month-picker');
+    const batchTagInput = document.getElementById('batch-tag');
     const batchSuggestions = document.getElementById('batch-suggestions');
+    const bulkHargaNormalInput = document.getElementById('bulk-harga-normal');
+    const bulkHargaDiskonInput = document.getElementById('bulk-harga-diskon');
+    const bulkStokInput = document.getElementById('bulk-stok');
+    const variantInputsContainer = document.getElementById('variant-inputs-container');
+    const submitVariantsBtn = document.getElementById('submit-variants-btn');
+    const productListContainer = document.getElementById('product-list-container');
     const searchInput = document.getElementById('search-input');
     const batchFilter = document.getElementById('batch-filter');
     const sortFilter = document.getElementById('sort-filter');
+    const selectAllFilteredCheckbox = document.getElementById('select-all-filtered');
     const productCounts = document.getElementById('product-counts');
-    const productListContainer = document.getElementById('product-list-container');
-    const lowStockListEl = document.getElementById('low-stock-list');
+    const paginationContainer = document.getElementById('pagination-container');
+    const printPdfBtn = document.getElementById('print-pdf-btn');
+    const printThermalBtn = document.getElementById('print-thermal-btn');
+    const downloadImagesBtn = document.getElementById('download-images-btn');
+    
+    // Variabel untuk Deskripsi
+    const descJudulPilihanInput = document.getElementById('desc-judul-pilihan');
+    const descJudulPilihanSuggestions = document.getElementById('desc-judul-pilihan-suggestions');
+    const generatedDescriptionTextarea = document.getElementById('generated-description');
+    const copyDescriptionBtn = document.getElementById('copy-description-btn');
+    
+    // Variabel untuk Modal & Popup
+    const imagePopup = document.getElementById('image-popup');
+    const popupImg = document.getElementById('popup-img');
+    const imagePopupClose = document.getElementById('image-popup-close');
+    const editModal = document.getElementById('edit-modal');
+    const editModalClose = document.getElementById('edit-modal-close');
+    const editUuidInput = document.getElementById('edit-uuid');
+    const editVariantNameInput = document.getElementById('edit-variant-name');
+    const editHargaNormalInput = document.getElementById('edit-harga-normal');
+    const editHargaDiskonInput = document.getElementById('edit-harga-diskon');
+    const editStokInput = document.getElementById('edit-stok');
+    const editStokNoteSelect = document.getElementById('edit-stok-note-select');
+    const editStokNoteOtherContainer = document.getElementById('edit-stok-note-other-container');
+    const editStokNoteOtherInput = document.getElementById('edit-stok-note-other');
+    const editBatchInput = document.getElementById('edit-batch');
+    const editLokasiInput = document.getElementById('edit-lokasi');
+    const editBatasMinimumInput = document.getElementById('edit-batas-minimum');
+    const editGambarVariantInput = document.getElementById('edit-gambar-variant');
+    const editGambarPreview = document.getElementById('edit-gambar-preview');
+    const saveEditBtn = document.getElementById('save-edit-btn');
+    const quickAddModal = document.getElementById('quick-add-modal');
+    const quickAddModalClose = document.getElementById('quick-add-modal-close');
+    const quickAddTitle = document.getElementById('quick-add-title');
+    const quickAddJudulInput = document.getElementById('quick-add-judul');
+    const quickAddVariantNameInput = document.getElementById('quick-add-variant-name');
+    const quickAddVariantSuggestions = document.getElementById('quick-add-variant-suggestions');
+    const quickAddStokInput = document.getElementById('quick-add-stok');
+    const quickAddBatchInput = document.getElementById('quick-add-batch');
+    const quickAddHargaNormalInput = document.getElementById('quick-add-harga-normal');
+    const quickAddHargaDiskonInput = document.getElementById('quick-add-harga-diskon');
+    const quickAddGambarInput = document.getElementById('quick-add-gambar');
+    const quickAddSaveBtn = document.getElementById('quick-add-save-btn');
+    const historyModal = document.getElementById('history-modal');
+    const historyModalClose = document.getElementById('history-modal-close');
+    const historyModalTitle = document.getElementById('history-modal-title');
+    const historyModalList = document.getElementById('history-modal-list');
+    const soldItemsModal = document.getElementById('sold-items-modal');
+    const soldItemsModalClose = document.getElementById('sold-items-modal-close');
+    const soldItemsModalList = document.getElementById('sold-items-modal-list');
+    const soldStartDateInput = document.getElementById('sold-start-date');
+    const soldEndDateInput = document.getElementById('sold-end-date');
+    const soldItemsTotalsEl = document.getElementById('sold-items-totals');
+    const masterReportModal = document.getElementById('master-report-modal');
+    const masterReportModalClose = document.getElementById('master-report-modal-close');
+    const masterReportModalList = document.getElementById('master-report-modal-list');
+    const masterReportSort = document.getElementById('master-report-sort');
+    const masterReportRilisStart = document.getElementById('master-report-rilis-start');
+    const masterReportRilisEnd = document.getElementById('master-report-rilis-end');
+    const pdfOptionsModal = document.getElementById('pdf-options-modal');
+    const pdfOptionsModalClose = document.getElementById('pdf-options-modal-close');
+    const generatePdfBtn = document.getElementById('generate-pdf-btn');
+    const downloadImagesModal = document.getElementById('download-images-modal');
+    const downloadImagesModalClose = document.getElementById('download-images-modal-close');
+    const downloadLinksList = document.getElementById('download-links-list');
+    const userListBody = document.getElementById('user-list-body');
 
     // --- Notification System ---
     const notificationContainer = document.createElement('div');
@@ -1093,5 +1183,6 @@
 </body>
 
 </html>
+
 
 
