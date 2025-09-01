@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nippori Sistem</title>
-    <link rel="icon" href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wgARCAAoACgDAREAAhEBAxEB/8QAHAABAAICAwEAAAAAAAAAAAAAAAYHBAUBAgMI/8QAGQEBAQEBAQEAAAAAAAAAAAAAAAECAwQG/9oADAMAAxAAAAP3wAAAAA4c2s3G9Z58S2lT1vEa4SklLqV7dE4+lQAAAAAP/EACQQAQACAQIGAgMAAAAAAAAAAAUDBAYBAgcIERITFCEiMTJR/9oACAEBAAEFAv68FvHkPqL5e22T2K+Poe36S9s6Pj+hL3fR2z+m/pG7RkPqL+Y7rG/c55e67R2K+Xuv0v6S9u6Pj+h/3fR2wum/pG794//xAAUEQEAAAAAAAAAAAAAAAAAAAAg/9oACAEDAQE/AR//xAAUEQEAAAAAAAAAAAAAAAAAAAAg/9oACAECAQE/AR//xAAsEAABAgIABAQGAwAAAAAAAAABAgMEAAUREhMhFCAxUVIQIiMyQUNQYXHB/9oACAEBAAY/Av2K7V94w3g4xU4gY6g/QxhvAxeoP0cYbwMvUF+jjDeBle/X6OMN4GV78v0cYaX2q7V9oQ3gYzUF+jjDeBjNQv0cYaXv8v0cYaXvy/RxhpfbL9HGGl9qufeEN4GJ1Bfo4w3gYnUv6OMNL7JfY4w0vtl9jjDS92X6OMNL3Zfo4w0vtl9jjDS+1Xav/2Q==" type="image/jpeg">
+    <link rel="icon" href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/BDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wgARCAAoACgDAREAAhEBAxEB/8QAHAABAAICAwEAAAAAAAAAAAAAAAYHBAUBAgMI/8QAGQEBAQEBAQEAAAAAAAAAAAAAAAECAwQG/9oADAMAAxAAAAP3wAAAAA4c2s3G9Z58S2lT1vEa4SklLqV7dE4+lQAAAAAP/EACQQAQACAQIGAgMAAAAAAAAAAAUDBAYBAgcIERITFCEiMTJR/9oACAEBAAEFAv68FvHkPqL5e22T2K+Poe36S9s6Pj+hL3fR2z+m/pG7RkPqL+Y7rG/c55e67R2K+Xuv0v6S9u6Pj+h/3fR2wum/pG794//xAAUEQEAAAAAAAAAAAAAAAAAAAAg/9oACAEDAQE/AR//xAAUEQEAAAAAAAAAAAAAAAAAAAAg/9oACAECAQE/AR//xAAsEAABAgIABAQGAwAAAAAAAAABAgMEAAUREhMhFCAxUVIQIiMyQUNQYXHB/9oACAEBAAY/Av2K7V94w3g4xU4gY6g/QxhvAxeoP0cYbwMvUF+jjDeBle/X6OMN4GV78v0cYaX2q7V9oQ3gYzUF+jjDeBjNQv0cYaXv8v0cYaXvy/RxhpfbL9HGGl9qufeEN4GJ1Bfo4w3gYnUv6OMNL7JfY4w0vtl9jjDS92X6OMNL3Zfo4w0vtl9jjDS+1Xav/2Q==" type="image/jpeg">
     <link rel="manifest" href="manifest.json">
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -128,6 +128,7 @@
             flex-shrink: 0;
             display: flex;
             flex-direction: column;
+            transition: transform 0.3s ease-in-out;
         }
         .nav-header {
             font-size: 1.5em;
@@ -336,7 +337,6 @@
                 border-right: none;
                 border-bottom: 1px solid var(--border-color);
                 padding: 10px;
-                display: block; /* Hide navigation by default on mobile */
             }
             .nav-header {
                 text-align: left;
@@ -1204,26 +1204,33 @@
 
         const handleImageUpload = async (fileInput, fileName) => {
             const file = fileInput.files[0];
-            if (!file) return null;
+            if (!file) {
+                 // Return null if no file is selected, do not show an error
+                 return null;
+            }
 
             if (file.size > 2 * 1024 * 1024) {
                 showNotification('Ukuran gambar terlalu besar (maks 2MB).', 'error');
                 return null;
             }
             
+            // Perbaikan: Pastikan nama file unik dan tidak ada karakter yang bermasalah
+            const cleanedFileName = fileName.replace(/[^a-zA-Z0-9-.]/g, '_');
+            
             const { error } = await supabase.storage
                 .from('product-images')
-                .upload(fileName, file, {
+                .upload(cleanedFileName, file, {
                     cacheControl: '3600',
                     upsert: true, 
                 });
 
             if (error) {
                 showNotification(`Gagal unggah gambar: ${error.message}`, 'error');
+                console.error('Supabase Storage Error:', error);
                 return null;
             }
             
-            const { data: { publicUrl } } = supabase.storage.from('product-images').getPublicUrl(fileName);
+            const { data: { publicUrl } } = supabase.storage.from('product-images').getPublicUrl(cleanedFileName);
             return publicUrl;
         };
 
