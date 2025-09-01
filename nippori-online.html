@@ -768,7 +768,7 @@
         // --- Supabase Client & Configuration ---
         const supabaseUrl = 'https://gscvuwzqdywkbmyhohju.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzY3Z1d3pxZHl3a2JteWhvaGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY3Mzc5NjgsImV4cCI6MjA3MjMxMzk2OH0.0TNw27sUI4BerA8qog9uPghdjjvcJ9wAgXIT79dkG7E';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
         // --- Data Stores (Supabase-driven now) ---
         let products = [];
@@ -2345,4 +2345,3 @@
     </script>
 </body>
 </html>
-
