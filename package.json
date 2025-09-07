@@ -1,0 +1,19 @@
+{
+  "name": "nippori-app",
+  "version": "1.0.0",
+  "description": "Sistem inventaris Nippori dengan database lokal.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "init-db": "node database.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.57.2",
+    "express": "^4.18.2",
+    "firebase-admin": "^13.5.0",
+    "sqlite3": "^5.1.7"
+  }
+}
